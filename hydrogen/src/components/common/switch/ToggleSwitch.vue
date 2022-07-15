@@ -1,6 +1,6 @@
 <template>
   <div class="switch"
-    @click="onSwitch"
+    @click="onClick"
     :style="{
       background:
         isOn ? 'var(--dark-switch-active-bg-color)'
@@ -21,14 +21,23 @@
 <script>
 export default {
   name: 'ToggleSwitch',
+  props: {
+    switchOverride: Boolean,
+  },
   data() {
     return {
       isOn: false,
     };
   },
   methods: {
-    onSwitch() {
+    onClick() {
       this.isOn = !this.isOn;
+      this.$emit(this.isOn ? 'on' : 'off');
+    },
+  },
+  watch: {
+    switchOverride(newState) {
+      this.isOn = newState;
     },
   },
 };

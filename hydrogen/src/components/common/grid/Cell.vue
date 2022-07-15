@@ -28,6 +28,8 @@ export default {
   props: {
     end: Number,
     mousePos: Array,
+    stateOverride: Number,
+    stateOverrideNotifier: Number,
   },
   data() {
     return {
@@ -70,6 +72,14 @@ export default {
       let distance = Math.sqrt((mouseX - labelX) ** 2 + (mouseY - labelY) ** 2);
       if (distance > maxDistance) distance = maxDistance;
       this.opacity = (1 - distance / maxDistance) * 100;
+    },
+    stateOverrideNotifier() {
+      this.state = this.stateOverride;
+      this.opacity = this.state === 0 ? 0 : 100;
+      console.log(123);
+    },
+    state(newState) {
+      this.$emit('stateChange', this.end, newState);
     },
   },
   methods: {

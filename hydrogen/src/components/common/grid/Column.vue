@@ -1,7 +1,11 @@
 <template>
   <div class="column">
     <div class="day">{{day}}</div>
-    <toggle-switch />
+    <toggle-switch
+      v-show="showSwitch"
+      :switch-override="switchOverride"
+      @on="allCellAvailable"
+      @off="allCellUnavailable"/>
     <div
         @mousemove="updateCellLabelOpacity"
         @mouseleave="hideCellLabels"
@@ -11,6 +15,9 @@
         :key="idx"
         :end="idx"
         :mouse-pos="mousePos"
+        :state-override="stateOverride"
+        :state-override-notifier="stateOverrideNotifier"
+        @stateChange="onStateChange"
       />
     </div>
   </div>
@@ -28,10 +35,15 @@ export default {
   },
   props: {
     day: String,
+    showSwitch: Boolean,
   },
   data() {
     return {
       mousePos: [0, 0],
+      stateOverride: 0,
+      stateOverrideNotifier: 0,
+      states: [...new Array(24)].map(() => 0),
+      switchOverride: false,
     };
   },
   methods: {
@@ -40,6 +52,24 @@ export default {
     },
     hideCellLabels() {
       this.mousePos = [-1];
+    },
+    allCellAvailable() {
+      this.switchOverride = true;
+      this.stateOverride = 1;
+      this.stateOverrideNotifier += 1;
+    },
+    allCellUnavailable() {
+      this.switchOverride = false;
+      this.stateOverride = 0;
+      this.stateOverrideNotifier += 1;
+    },
+    onStateChange(idx, newState) {
+      this.states[idx - 1] = newState;
+      if (this.states.every((elem) => elem > 0)) {
+        this.switchOverride = true;
+      } else {
+        this.switchOverride = false;
+      }
     },
   },
 };

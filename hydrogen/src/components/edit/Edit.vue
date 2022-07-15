@@ -1,6 +1,6 @@
 <template>
   <div class="edit-view">
-    <grid />
+    <grid :showSwitch="true"/>
   </div>
 </template>
 

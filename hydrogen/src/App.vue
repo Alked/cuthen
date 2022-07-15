@@ -54,7 +54,7 @@ body {
   /* Grid */
   --dark-cell-bg-color: #4d4d4d;
   --dark-cell-timespan-color: #bbb;
-  --dark-cell-timespan-active-color: #4d4d4d;
+  --dark-cell-timespan-active-color: #000;
   --dark-cell-available-color: #4cb569;
   --dark-cell-uncertain-color: #c9bd56;
   /* Switch */
