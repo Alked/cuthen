@@ -23,7 +23,7 @@ export default {
 .top-bar {
   width: 100%;
   height: 3rem;
-  background: #597081;
+  background: var(--dark-top-bar-bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,7 +31,7 @@ export default {
 .info {
   padding-left: 1rem;
   font-family: 'Montserrat';
-  color: #2d2d2d;
+  color: var(--dark-main-bg-color);
   font-weight: bold;
   font-size: larger;
 }
