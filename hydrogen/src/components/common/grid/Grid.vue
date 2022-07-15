@@ -1,11 +1,5 @@
 <template>
   <div class='grid'>
-      <!-- <div class='ticks'>
-        <span class='tick' v-for='end in 11' :key='end'>{{end}} AM</span>
-        <span class='tick'>12 PM</span>
-        <span class='tick' v-for='end in 11' :key='end'>{{end}} PM</span>
-        <span class='tick'>0 AM</span>
-      </div> -->
       <div class='columns'>
         <column v-for='idx in 7' :key='idx' :day="weeks[idx - 1]" />
       </div>

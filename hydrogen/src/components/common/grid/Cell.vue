@@ -1,10 +1,22 @@
 <template>
-  <div class="cell">
+  <div
+    class="cell"
+    oncontextmenu="return false;"
+    @mousedown="onMouseDown"
+    @mouseenter="onMouseEnter"
+    :style="{ background: [
+      'var(--dark-cell-bg-color)',
+      'var(--dark-cell-available-color)',
+      'var(--dark-cell-uncertain-color)'
+    ][state] }">
     <span
       class="timespan"
       ref="timespan"
-      :style="{ opacity: `${opacity}%` }"
-    >
+      :style="{
+        opacity: `${opacity}%`,
+        color: state === 0 ? 'var(--dark-cell-timespan-color)'
+          : 'var(--dark-cell-timespan-active-color)'
+      }">
       {{ timespan }}
     </span>
   </div>
@@ -41,6 +53,10 @@ export default {
   },
   watch: {
     mousePos(newPos) {
+      if (this.state !== 0) {
+        this.opacity = 100;
+        return;
+      }
       if (newPos[0] === -1) {
         this.opacity = 0;
         return;
@@ -56,14 +72,60 @@ export default {
       this.opacity = (1 - distance / maxDistance) * 100;
     },
   },
+  methods: {
+    onMouseDown(event) {
+      switch (event.button) {
+        case 0:
+          // Left mouse down
+          if (this.state > 0) {
+            this.state = 0;
+          } else {
+            this.state = 1;
+          }
+          break;
+        case 2:
+          // Right mouse down
+          if (this.state > 1) {
+            this.state = 0;
+          } else {
+            this.state = 2;
+          }
+          break;
+        default:
+          break;
+      }
+    },
+    onMouseEnter(event) {
+      if (event.buttons === 0) return;
+      switch (event.buttons) {
+        case 1:
+          // Left mouse down
+          if (this.state > 0) {
+            this.state = 0;
+          } else {
+            this.state = 1;
+          }
+          break;
+        case 2:
+          // Right mouse down
+          if (this.state > 1) {
+            this.state = 0;
+          } else {
+            this.state = 2;
+          }
+          break;
+        default:
+          break;
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .cell {
-  width: 5rem;
+  width: 6rem;
   height: 2rem;
-  background: var(--dark-cell-bg-color);
   margin-top: 3px;
   display: flex;
   align-items: center;
@@ -72,10 +134,16 @@ export default {
 .timespan {
   font-size: 12px;
   font-family: 'Montserrat';
-  color: var(--dark-cell-timespan-color);
-  opacity: 0%;
 }
 .timespan:hover {
   cursor: default;
+}
+.cell:first-of-type {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.cell:last-of-type {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 </style>
