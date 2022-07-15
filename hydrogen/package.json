@@ -8,8 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/runtime-core": "^3.2.37",
     "core-js": "^3.6.5",
     "primeicons": "^5.0.0",
+    "primevue": "^3.15.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
   },

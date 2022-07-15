@@ -41,12 +41,17 @@ body {
   color: #2c3e50;
 
   /* Skin configs */
+
   /* Dark */
+  /* Banner */
   --dark-main-bg-color: #2d2d2d;
   --dark-plain-text-color: #2d2d2d;
   --dark-top-bar-bg-color: #597081;
   --dark-nav-button-active-color: #6c889c;
   --dark-nav-button-inactive-color: #7ea0b7;
+  /* Grid */
+  --dark-cell-bg-color: #4d4d4d;
+  --dark-cell-timespan-color: #888888;
 }
 
 .banner {

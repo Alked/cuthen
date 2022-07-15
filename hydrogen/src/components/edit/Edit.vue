@@ -1,14 +1,24 @@
 <template>
-  <div>
+  <div class="edit-view">
+    <div style="height: 1000px;"></div>
+    <grid />
   </div>
 </template>
 
 <script>
+import Grid from '@/components/common/grid/Grid.vue';
+
 export default {
   name: 'Edit',
+  components: {
+    Grid,
+  },
 };
 </script>
 
 <style scoped>
-
+.edit-view {
+  display: flex;
+  justify-content: center;
+}
 </style>
