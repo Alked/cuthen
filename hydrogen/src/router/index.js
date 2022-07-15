@@ -5,6 +5,10 @@ import ScheduleView from '../views/ScheduleView.vue';
 const routes = [
   {
     path: '/',
+    redirect: () => 'edit',
+  },
+  {
+    path: '/edit',
     name: 'Edit',
     component: EditView,
   },

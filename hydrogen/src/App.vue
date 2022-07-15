@@ -1,14 +1,19 @@
 <template>
-  <top-bar title="CUThen" version="v0.0.1"/>
+  <div class="banner">
+    <top-bar title="CUThen" version="v0.0.1"/>
+    <nav-bar />
+  </div>
   <router-view/>
 </template>
 
 <script>
 import TopBar from './components/common/topbar/TopBar.vue';
+import NavBar from './components/common/navbar/NavBar.vue';
 
 export default {
   components: {
     TopBar,
+    NavBar,
   },
 };
 </script>
@@ -34,5 +39,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.banner {
+  width: 1200px;
 }
 </style>

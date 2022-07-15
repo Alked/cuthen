@@ -21,7 +21,7 @@ export default {
 
 <style scoped>
 .top-bar {
-  width: 1200px;
+  width: 100%;
   height: 3rem;
   background: #597081;
   display: flex;
