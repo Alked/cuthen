@@ -3,7 +3,7 @@
     <span
       class="timespan"
       ref="timespan"
-      :style="{ opacity: opacity + '%' }"
+      :style="{ opacity: `${opacity}%` }"
     >
       {{ timespan }}
     </span>
@@ -21,7 +21,6 @@ export default {
     return {
       state: 0,
       opacity: 0,
-      scale: 1,
     };
   },
   computed: {
@@ -44,10 +43,9 @@ export default {
     mousePos(newPos) {
       if (newPos[0] === -1) {
         this.opacity = 0;
-        console.log('left');
         return;
       }
-      const maxDistance = 200;
+      const maxDistance = 400;
       const mouseX = newPos[0];
       const mouseY = newPos[1];
       const posLabel = this.$refs.timespan.getBoundingClientRect();

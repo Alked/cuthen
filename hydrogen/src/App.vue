@@ -43,15 +43,21 @@ body {
   /* Skin configs */
 
   /* Dark */
-  /* Banner */
+  /* Global */
   --dark-main-bg-color: #2d2d2d;
-  --dark-plain-text-color: #2d2d2d;
+  --dark-banner-text-color: #2d2d2d;
+  --dark-plain-text-color: #ddd;
+  /* Banner */
   --dark-top-bar-bg-color: #597081;
   --dark-nav-button-active-color: #6c889c;
   --dark-nav-button-inactive-color: #7ea0b7;
   /* Grid */
   --dark-cell-bg-color: #4d4d4d;
-  --dark-cell-timespan-color: #888888;
+  --dark-cell-timespan-color: #bbb;
+  /* Switch */
+  --dark-switch-inactive-bg-color: #597081;
+  --dark-switch-active-bg-color: #4cb569;
+  --dark-switch-toggle-color: #91a2ae;
 }
 
 .banner {

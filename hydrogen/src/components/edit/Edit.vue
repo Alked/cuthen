@@ -1,6 +1,5 @@
 <template>
   <div class="edit-view">
-    <div style="height: 1000px;"></div>
     <grid />
   </div>
 </template>
