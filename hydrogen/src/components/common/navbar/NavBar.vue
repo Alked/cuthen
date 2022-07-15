@@ -5,14 +5,14 @@
       @click="$router.replace('/edit')"
       :class="{ active: isEditMode, inactive: !isEditMode }"
     >
-      Edit
+      <i class="pi pi-pencil"></i> &NonBreakingSpace; Edit
     </div>
     <div
       class="nav-button right"
       @click="$router.replace('/schedule')"
       :class="{ active: !isEditMode, inactive: isEditMode }"
     >
-      Schedule
+      <i class="pi pi-calendar"></i> &NonBreakingSpace; Schedule
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
 .nav-button {
   height: 5rem;
   font-family: "Montserrat";
-  color: #000;
+  color: #2d2d2d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@ export default {
   background: #7ea0b7;
 }
 .inactive:hover {
-  width: 30%;
+  width: 28%;
   cursor: pointer;
 }
 </style>
