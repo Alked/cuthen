@@ -67,9 +67,7 @@ export default {
       const mouseX = newPos[0];
       const mouseY = newPos[1];
       const posLabel = this.$refs.timespan.getBoundingClientRect();
-      const labelX = posLabel.x;
-      const labelY = posLabel.y;
-      let distance = Math.sqrt((mouseX - labelX) ** 2 + (mouseY - labelY) ** 2);
+      let distance = Math.sqrt((mouseX - posLabel.x) ** 2 + (mouseY - posLabel.y) ** 2);
       if (distance > maxDistance) distance = maxDistance;
       this.opacity = (1 - distance / maxDistance) * 100;
     },
