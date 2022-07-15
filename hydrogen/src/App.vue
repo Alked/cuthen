@@ -1,14 +1,19 @@
 <template>
-  <top-bar title="CUThen" version="v0.0.1"/>
+  <div class="banner">
+    <top-bar title="CUThen" version="v0.0.1"/>
+    <nav-bar />
+  </div>
   <router-view/>
 </template>
 
 <script>
 import TopBar from './components/common/topbar/TopBar.vue';
+import NavBar from './components/common/navbar/NavBar.vue';
 
 export default {
   components: {
     TopBar,
+    NavBar,
   },
 };
 </script>
@@ -34,5 +39,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  /* Skin configs */
+  /* Dark */
+  --dark-main-bg-color: #2d2d2d;
+  --dark-plain-text-color: #2d2d2d;
+  --dark-top-bar-bg-color: #597081;
+  --dark-nav-button-active-color: #6c889c;
+  --dark-nav-button-inactive-color: #7ea0b7;
+}
+
+.banner {
+  width: 1200px;
 }
 </style>
