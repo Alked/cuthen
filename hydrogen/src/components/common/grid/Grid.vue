@@ -29,7 +29,6 @@ export default {
 <style scoped>
 .grid {
   display: flex;
-  padding-top: 5rem;
 }
 .columns {
   display: flex;
@@ -41,13 +40,6 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-.ticks {
-  display: flex;
-  flex-flow: column;
-  gap: 1.175rem;
-  margin-right: 1rem;
-  padding-top: 2rem;
 }
 .tick {
   display: flex;
