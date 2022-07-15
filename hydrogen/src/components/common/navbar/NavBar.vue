@@ -35,7 +35,7 @@ export default {
 .nav-button {
   height: 5rem;
   font-family: "Montserrat";
-  color: var(--dark-plain-text-color);
+  color: var(--dark-banner-text-color);
   display: flex;
   align-items: center;
   justify-content: center;
