@@ -25,14 +25,12 @@ export default {
     url("./assets/fonts/Montserrat/Montserrat-Regular.ttf")
       format("truetype");
 }
-
 body {
   margin: 0;
   background: #2d2d2d;
   display: flex;
   justify-content: center;
 }
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -61,9 +59,31 @@ body {
   --dark-switch-inactive-bg-color: #597081;
   --dark-switch-active-bg-color: #4cb569;
   --dark-switch-toggle-color: #91a2ae;
+  /* Text box */
+  --dark-textbox-bg-color: #5c5c5c;
+  --dark-dropbox-bg-color:#464646;
+  /* Button */
+  --dark-button-bg-color: #5c5c5c;
+  --dark-button-hover-color: #6d6d6d;
+  --dark-button-active-color: #5f5f5f;
+  --dark-button-disabled-color: #4cb569;
 }
-
 .banner {
   width: 1200px;
+}
+button {
+  border-radius: 5rem;
+  font-family: 'Montserrat';
+  background: var(--dark-button-bg-color);
+  border: none;
+  color: var(--dark-plain-text-color);
+  transition: all ease-in-out 150ms;
+}
+button:hover {
+  cursor: pointer;
+  background: var(--dark-button-hover-color);
+}
+button:active {
+  background: var(--dark-button-active-color);
 }
 </style>
