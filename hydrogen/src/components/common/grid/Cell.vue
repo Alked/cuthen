@@ -83,9 +83,7 @@ export default {
       this.opacity = this.state === 0 ? 0 : 100;
     },
     state(newState) {
-      if (!this.passiveUpdate) {
-        this.$emit('stateChange', this.cellID, newState);
-      }
+      this.$emit('stateChange', this.cellID, newState);
     },
   },
   methods: {
