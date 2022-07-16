@@ -35,7 +35,7 @@ export default {
 .nav-button {
   height: 5rem;
   font-family: "Montserrat";
-  color: var(--dark-banner-text-color);
+  color: var(--banner-text-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,11 +49,11 @@ export default {
 }
 .active {
   width: 75%;
-  background: var(--dark-nav-button-active-color);
+  background: var(--nav-button-active-color);
 }
 .inactive {
   width:25%;
-  background: var(--dark-nav-button-inactive-color);
+  background: var(--nav-button-inactive-color);
 }
 .inactive:hover {
   width: 28%;

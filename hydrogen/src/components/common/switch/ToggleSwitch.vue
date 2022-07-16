@@ -3,16 +3,16 @@
     @click="onClick"
     :style="{
       background:
-        isOn ? 'var(--dark-switch-active-bg-color)'
-          : 'var(--dark-switch-inactive-bg-color)'
+        isOn ? 'var(--switch-active-bg-color)'
+          : 'var(--switch-inactive-bg-color)'
     }">
     <div
       class="toggle"
       :style="{
         'margin-left': isOn ? '1.7rem' : '0',
         background:
-          isOn ? 'var(--dark-plain-text-color)'
-            : 'var(--dark-switch-toggle-color)'
+          isOn ? 'var(--plain-text-color)'
+            : 'var(--switch-toggle-color)'
       }"
     ></div>
   </div>
@@ -47,7 +47,7 @@ export default {
 .switch {
   width: 3.4rem;
   height: 1.7rem;
-  background: var(--dark-switch-inactive-bg-color);
+  background: var(--switch-inactive-bg-color);
   border-radius: 5rem;
   transition: all ease-in-out 100ms;
 }
@@ -58,7 +58,7 @@ export default {
   width: 1.7rem;
   height: 1.7rem;
   border-radius: 5rem;
-  background: var(--dark-switch-toggle-color);
+  background: var(--switch-toggle-color);
   transition: all ease-in-out 100ms;
 }
 .on {
