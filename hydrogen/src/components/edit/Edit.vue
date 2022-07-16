@@ -110,7 +110,7 @@ export default {
       loadDisabled: false,
       copyDisabled: false,
       timezones: [],
-      timezone: null,
+      timezone: '',
     };
   },
   computed: {
@@ -139,8 +139,8 @@ export default {
   },
   mounted() {
     let localTimezone = '';
-    const timezones = {};
     getTimeZones().forEach((zone) => {
+      // Build offset string
       const offsetInHours = zone.rawOffsetInMinutes / 60;
       let offsetString = '';
       const offsetInHoursAbs = Math.abs(offsetInHours);
@@ -158,6 +158,7 @@ export default {
       } else {
         offsetString = `+${offsetString}`;
       }
+      // Build timezone short name
       let shortname = zone.name;
       shortname = shortname
         .replace('America', 'US')
@@ -166,19 +167,22 @@ export default {
         .replace('Europe', 'EU')
         .replace('Asia', 'AS')
         .replace('Australia', 'AU')
-        .replace('India', 'IN')
+        .replace('Indian', 'IN')
         .replace('Argentina', 'AR')
         .replace('Antarctica', 'AN')
-        .replace('Atlantic', 'ATL');
-      timezones[shortname] = offsetString;
+        .replace('Atlantic', 'ATL')
+        .replace('Arctic', 'ARC');
+      // Build timezone info
+      this.timezones.push({
+        printed: `(UTC${offsetString}) ${shortname}`,
+        value: zone.rawOffsetInMinutes,
+        id: `${shortname}:${offsetString}`,
+      });
       if (Intl.DateTimeFormat().resolvedOptions().timeZone === zone.name) {
-        localTimezone = shortname;
+        localTimezone = `${shortname}:${offsetString}`;
       }
     });
-    Object.keys(timezones).forEach((name) => {
-      this.timezones.push(`(UTC${timezones[name]}) ${name}`);
-    });
-    this.timezone = `(UTC${timezones[localTimezone]}) ${localTimezone}`;
+    this.timezone = localTimezone;
   },
 };
 </script>

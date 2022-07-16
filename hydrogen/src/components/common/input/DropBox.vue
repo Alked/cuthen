@@ -5,8 +5,8 @@
     </div>
     <div class="select">
       <select v-model="tzone">
-        <option v-for="entry in entries" :key="entry" :value="entry">
-          {{ entry }}
+        <option v-for="entry in entries" :key="entry" :value="entry.id">
+          {{ entry.printed }}
         </option>
       </select>
     </div>
@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      tzone: null,
+      tzone: '',
     };
   },
   watch: {
