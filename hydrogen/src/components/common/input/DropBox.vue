@@ -42,7 +42,7 @@ export default {
   display: flex;
   width: 18rem;
   height: 3rem;
-  color: var(--dark-plain-text-color);
+  color: var(--plain-text-color);
 }
 .icon {
   width: 3rem;
@@ -50,13 +50,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--dark-textbox-bg-color);
+  background: var(--textbox-bg-color);
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
 }
 .select {
   width: 14rem;
-  border: 3px solid var(--dark-textbox-bg-color);
+  border: 3px solid var(--textbox-bg-color);
   border-left: none;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
@@ -68,7 +68,7 @@ export default {
 }
 select {
   height: 100%;
-  background: var(--dark-main-bg-color);
+  background: var(--main-bg-color);
   border: none;
   font-family: 'Montserrat';
   color: #d5d5d5;
@@ -77,6 +77,6 @@ select {
   outline: none;
 }
 select option {
-  background: var(--dark-dropbox-bg-color);
+  background: var(--dropbox-bg-color);
 }
 </style>

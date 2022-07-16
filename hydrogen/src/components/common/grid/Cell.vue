@@ -5,17 +5,17 @@
     @mousedown="onMouseDown"
     @mouseenter="onMouseEnter"
     :style="{ background: [
-      'var(--dark-cell-bg-color)',
-      'var(--dark-cell-available-color)',
-      'var(--dark-cell-uncertain-color)'
+      'var(--cell-bg-color)',
+      'var(--cell-available-color)',
+      'var(--cell-uncertain-color)'
     ][state] }">
     <span
       class="timespan"
       ref="timespan"
       :style="{
         opacity: `${opacity}%`,
-        color: state === 0 ? 'var(--dark-cell-timespan-color)'
-          : 'var(--dark-cell-timespan-active-color)'
+        color: state === 0 ? 'var(--cell-timespan-color)'
+          : 'var(--cell-timespan-active-color)'
       }">
       {{ timespan }}
     </span>

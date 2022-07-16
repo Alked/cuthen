@@ -84,7 +84,7 @@ export default {
 }
 .day {
   font-family: 'Montserrat';
-  color: var(--dark-plain-text-color);
+  color: var(--plain-text-color);
   font-size: 1.6rem;
 }
 </style>

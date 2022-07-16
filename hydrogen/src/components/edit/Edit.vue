@@ -167,11 +167,11 @@ export default {
   height: 2.3rem;
 }
 .button:disabled {
-  background: var(--dark-button-disabled-color);
+  background: var(--button-disabled-color);
   cursor: default;
 }
 .help {
-  color: var(--dark-plain-text-color);
+  color: var(--plain-text-color);
 }
 .help-entry {
   display: flex;
@@ -181,7 +181,7 @@ export default {
 .icon-wrapper {
   width: 1.7rem;
   height: 1.7rem;
-  background: var(--dark-textbox-bg-color);
+  background: var(--textbox-bg-color);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -207,15 +207,15 @@ export default {
   padding: 0 3px 0 3px;
 }
 .slot-inline.uncertain, .slot-inline.available {
-  color: var(--dark-main-bg-color);
+  color: var(--main-bg-color);
 }
 .available {
-  background: var(--dark-cell-available-color);
+  background: var(--cell-available-color);
 }
 .uncertain {
-  background: var(--dark-cell-uncertain-color);
+  background: var(--cell-uncertain-color);
 }
 .unavailable {
-  background: var(--dark-cell-bg-color);
+  background: var(--cell-bg-color);
 }
 </style>

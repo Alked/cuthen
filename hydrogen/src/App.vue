@@ -1,9 +1,11 @@
 <template>
-  <div class="banner">
-    <top-bar title="CUThen" version="v0.0.1"/>
-    <nav-bar />
+  <div :class="['main', `skin-${skin}`]">
+    <div class="banner">
+      <top-bar title="CUThen" version="v0.0.1"/>
+      <nav-bar />
+    </div>
+    <router-view/>
   </div>
-  <router-view/>
 </template>
 
 <script>
@@ -14,6 +16,11 @@ export default {
   components: {
     TopBar,
     NavBar,
+  },
+  data() {
+    return {
+      skin: 'dark',
+    };
   },
 };
 </script>
@@ -32,41 +39,37 @@ body {
   justify-content: center;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-
-  /* Skin configs */
-
+}
+.skin-dark {
   /* Dark */
   /* Global */
-  --dark-main-bg-color: #2d2d2d;
-  --dark-banner-text-color: #2d2d2d;
-  --dark-plain-text-color: #ddd;
+  --main-bg-color: #2d2d2d;
+  --banner-text-color: #2d2d2d;
+  --plain-text-color: #ddd;
   /* Banner */
-  --dark-top-bar-bg-color: #597081;
-  --dark-nav-button-active-color: #6c889c;
-  --dark-nav-button-inactive-color: #7ea0b7;
+  --top-bar-bg-color: #597081;
+  --nav-button-active-color: #6c889c;
+  --nav-button-inactive-color: #7ea0b7;
   /* Grid */
-  --dark-cell-bg-color: #4d4d4d;
-  --dark-cell-timespan-color: #bbb;
-  --dark-cell-timespan-active-color: #000;
-  --dark-cell-available-color: #4cb569;
-  --dark-cell-uncertain-color: #c9bd56;
+  --cell-bg-color: #4d4d4d;
+  --cell-timespan-color: #bbb;
+  --cell-timespan-active-color: #000;
+  --cell-available-color: #4cb569;
+  --cell-uncertain-color: #c9bd56;
   /* Switch */
-  --dark-switch-inactive-bg-color: #597081;
-  --dark-switch-active-bg-color: #4cb569;
-  --dark-switch-toggle-color: #91a2ae;
+  --switch-inactive-bg-color: #597081;
+  --switch-active-bg-color: #4cb569;
+  --switch-toggle-color: #91a2ae;
   /* Text box */
-  --dark-textbox-bg-color: #5c5c5c;
-  --dark-dropbox-bg-color:#464646;
+  --textbox-bg-color: #5c5c5c;
+  --dropbox-bg-color:#464646;
   /* Button */
-  --dark-button-bg-color: #5c5c5c;
-  --dark-button-hover-color: #6d6d6d;
-  --dark-button-active-color: #5f5f5f;
-  --dark-button-disabled-color: #4cb569;
+  --button-bg-color: #5c5c5c;
+  --button-hover-color: #6d6d6d;
+  --button-active-color: #5f5f5f;
+  --button-disabled-color: #4cb569;
 }
 .banner {
   width: 1200px;
@@ -74,16 +77,16 @@ body {
 button {
   border-radius: 5rem;
   font-family: 'Montserrat';
-  background: var(--dark-button-bg-color);
+  background: var(--button-bg-color);
   border: none;
-  color: var(--dark-plain-text-color);
+  color: var(--plain-text-color);
   transition: all ease-in-out 150ms;
 }
 button:hover {
   cursor: pointer;
-  background: var(--dark-button-hover-color);
+  background: var(--button-hover-color);
 }
 button:active {
-  background: var(--dark-button-active-color);
+  background: var(--button-active-color);
 }
 </style>
