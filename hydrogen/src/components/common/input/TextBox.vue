@@ -3,7 +3,7 @@
     <div class="icon">
       <i :class="['pi', `pi-${icon}`]"></i>
     </div>
-    <input type="text" v-model="data" :placeholder="placeholder">
+    <input type="text" v-model="dataLocal" :placeholder="placeholder" @click="onClick">
   </div>
 </template>
 
@@ -13,11 +13,26 @@ export default {
   props: {
     icon: String,
     placeholder: String,
+    data: String,
+    selectAllOnClick: Boolean,
   },
   data() {
     return {
-      data: '',
+      dataLocal: '',
     };
+  },
+  methods: {
+    onClick(event) {
+      if (this.selectAllOnClick) event.target.select();
+    },
+  },
+  watch: {
+    dataLocal(newData) {
+      this.$emit('update:data', newData);
+    },
+    data(newData) {
+      this.dataLocal = newData;
+    },
   },
 };
 </script>

@@ -26,9 +26,12 @@
 export default {
   name: 'Cell',
   props: {
+    cellID: Number,
     end: Number,
     mousePos: Array,
-    stateOverride: Number,
+    unifiedStateOverride: Number,
+    unifiedStateOverrideNotifier: Number,
+    stateOverride: Array,
     stateOverrideNotifier: Number,
   },
   data() {
@@ -71,13 +74,16 @@ export default {
       if (distance > maxDistance) distance = maxDistance;
       this.opacity = (1 - distance / maxDistance) * 100;
     },
-    stateOverrideNotifier() {
-      this.state = this.stateOverride;
+    unifiedStateOverrideNotifier() {
+      this.state = this.unifiedStateOverride;
       this.opacity = this.state === 0 ? 0 : 100;
-      console.log(123);
+    },
+    stateOverrideNotifier() {
+      this.state = this.stateOverride[this.cellID];
+      this.opacity = this.state === 0 ? 0 : 100;
     },
     state(newState) {
-      this.$emit('stateChange', this.end, newState);
+      this.$emit('stateChange', this.cellID, newState);
     },
   },
   methods: {

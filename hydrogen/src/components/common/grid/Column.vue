@@ -14,7 +14,10 @@
         v-for="idx in 24"
         :key="idx"
         :end="idx"
+        :cellID="idx - 1"
         :mouse-pos="mousePos"
+        :unified-state-override="unifiedStateOverride"
+        :unified-state-override-notifier="unifiedStateOverrideNotifier"
         :state-override="stateOverride"
         :state-override-notifier="stateOverrideNotifier"
         @stateChange="onStateChange"
@@ -36,15 +39,27 @@ export default {
   props: {
     day: String,
     showSwitch: Boolean,
+    dayID: Number,
+    gridStateOverride: Array,
+    gridStateOverrideNotifier: Number,
   },
   data() {
     return {
       mousePos: [0, 0],
-      stateOverride: 0,
+      unifiedStateOverride: 0,
+      unifiedStateOverrideNotifier: 0,
+      stateOverride: [],
       stateOverrideNotifier: 0,
       states: [...new Array(24)].map(() => 0),
       switchOverride: false,
     };
+  },
+  watch: {
+    gridStateOverrideNotifier() {
+      // Notify cells to update themselves
+      this.stateOverride = this.gridStateOverride[this.dayID];
+      this.stateOverrideNotifier += 1;
+    },
   },
   methods: {
     updateCellLabelOpacity(event) {
@@ -55,21 +70,23 @@ export default {
     },
     allCellAvailable() {
       this.switchOverride = true;
-      this.stateOverride = 1;
-      this.stateOverrideNotifier += 1;
+      this.unifiedStateOverride = 1;
+      this.unifiedStateOverrideNotifier += 1;
     },
     allCellUnavailable() {
       this.switchOverride = false;
-      this.stateOverride = 0;
-      this.stateOverrideNotifier += 1;
+      this.unifiedStateOverride = 0;
+      this.unifiedStateOverrideNotifier += 1;
     },
-    onStateChange(idx, newState) {
-      this.states[idx - 1] = newState;
+    onStateChange(cellID, newState) {
+      this.states[cellID] = newState;
       if (this.states.every((elem) => elem > 0)) {
         this.switchOverride = true;
       } else {
         this.switchOverride = false;
       }
+      // Notify grid
+      this.$emit('weeklyStatesChanged', this.day, this.states);
     },
   },
 };

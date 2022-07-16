@@ -4,19 +4,10 @@
       <i :class="['pi', `pi-${icon}`]"></i>
     </div>
     <div class="select">
-      <select v-model="timezone">
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
+      <select v-model="selectedIDLocal">
+        <option v-for="entry in entries" :key="entry" :value="entry.id">
+          {{ entry.printed }}
+        </option>
       </select>
     </div>
   </div>
@@ -27,12 +18,21 @@ export default {
   name: 'DropBox',
   props: {
     icon: String,
+    entries: Array,
+    selectedID: String,
   },
   data() {
     return {
-      data: '',
-      timezone: null,
+      selectedIDLocal: '',
     };
+  },
+  watch: {
+    selectedIDLocal(newID) {
+      this.$emit('update:selectedID', newID);
+    },
+    selectedID(newID) {
+      this.selectedIDLocal = newID;
+    },
   },
 };
 </script>
@@ -72,7 +72,7 @@ select {
   border: none;
   font-family: 'Montserrat';
   color: #d5d5d5;
-  font-size: inherit;
+  font-size: 0.7rem;
   cursor: inherit;
   outline: none;
 }

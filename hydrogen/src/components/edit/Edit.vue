@@ -2,11 +2,11 @@
   <div class="edit-view">
     <div class="info-block">
       <div class="info-col">
-        <text-box :icon="'user'" :placeholder="'Insert a nickname'"/>
-        <drop-box :icon="'clock'"/>
+        <text-box :icon="'user'" :placeholder="'Insert a nickname'" v-model:data="nickname"/>
+        <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
-        <text-box :icon="'code'"/>
+        <text-box :icon="'code'" v-model:data="code" :selectAllOnClick="true"/>
         <div class="buttons">
           <button class="button" @click="onClickLoad" :disabled="loadDisabled">
             <i class="pi pi-check" v-show="loadDisabled"></i>
@@ -88,11 +88,16 @@
         </div>
       </div>
     </div>
-    <grid :showSwitch="true"/>
+    <grid
+      :showSwitch="true"
+      :codeOverride="gridCodeOverride"
+      :codeOverrideNotifier="gridCodeOverrideNotifier"
+      @gridChanged="onGridChanged"/>
   </div>
 </template>
 
 <script>
+import { timezones, localtz } from '@/model/edit/timezones';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import DropBox from '@/components/common/input/DropBox.vue';
@@ -108,6 +113,13 @@ export default {
     return {
       loadDisabled: false,
       copyDisabled: false,
+      timezones: [],
+      timezone: '',
+      nickname: '',
+      gridCode: '0',
+      code: '',
+      gridCodeOverride: '',
+      gridCodeOverrideNotifier: 0,
     };
   },
   computed: {
@@ -117,22 +129,44 @@ export default {
     copyLabel() {
       return this.copyDisabled ? '' : 'Copy';
     },
+    codeBuilder() {
+      return `${this.nickname}$${this.gridCode}$${this.timezone}`;
+    },
   },
   methods: {
     onClickLoad() {
       // TODO: Load code to grid
+      // Digest code
+      const [name, gridcode, timezone] = this.code.split('$');
+      this.nickname = name;
+      this.gridCodeOverride = gridcode;
+      this.gridCodeOverrideNotifier += 1;
+      this.timezone = timezone;
       this.loadDisabled = true;
       setTimeout(() => {
         this.loadDisabled = false;
       }, 2000);
     },
     onClickCopy() {
-      // TODO: Copy to clipboard
+      navigator.clipboard.writeText(this.code);
       this.copyDisabled = true;
       setTimeout(() => {
         this.copyDisabled = false;
       }, 2000);
     },
+    onGridChanged(newCode) {
+      this.gridCode = newCode;
+    },
+  },
+  watch: {
+    codeBuilder(newCode) {
+      this.code = newCode;
+    },
+  },
+  mounted() {
+    // Initialise after mounted to trigger watchers and updates
+    this.timezones = timezones;
+    this.timezone = localtz;
   },
 };
 </script>
