@@ -20,6 +20,7 @@
         :unified-state-override-notifier="unifiedStateOverrideNotifier"
         :state-override="stateOverride"
         :state-override-notifier="stateOverrideNotifier"
+        :isEditable="isEditable"
         @stateChange="onStateChange"
       />
     </div>
@@ -38,7 +39,7 @@ export default {
   },
   props: {
     day: String,
-    isEdittable: Boolean,
+    isEditable: Boolean,
     dayID: Number,
     gridStateOverride: Array,
     gridStateOverrideNotifier: Number,

@@ -5,7 +5,7 @@
           v-for='idx in 7' :key='idx'
           :day="weeks[idx - 1]"
           :dayID="idx - 1"
-          :isEdittable="isEdittable"
+          :isEditable="isEditable"
           :gridStateOverride="statesOverride"
           :gridStateOverrideNotifier="statesOverrideNotifier"
           @weeklyStatesChanged="onWeeklyStatesChanged"/>
@@ -21,7 +21,7 @@ import Column from './Column.vue';
 export default {
   name: 'Grid',
   props: {
-    isEdittable: Boolean,
+    isEditable: Boolean,
     codeOverride: String,
     codeOverrideNotifier: Number,
   },
