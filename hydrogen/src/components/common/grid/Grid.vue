@@ -12,12 +12,15 @@
 </template>
 
 <script>
+import { encode } from '@/model/grid/gridcode';
 import Column from './Column.vue';
 
 export default {
   name: 'Grid',
   props: {
     showSwitch: Boolean,
+    codeOverride: String,
+    codeOverrideNotifier: Number,
   },
   data() {
     return {
@@ -33,27 +36,7 @@ export default {
       // Update states
       const dayIdx = this.weeks.indexOf(day);
       this.states[dayIdx] = newState;
-      // Emit to view the latest code snippet
-      let code = '0b';
-      this.states.forEach((week) => {
-        week.forEach((slot) => {
-          switch (slot) {
-            case 0:
-              code += '00';
-              break;
-            case 1:
-              code += '11';
-              break;
-            case 2:
-              code += '01';
-              break;
-            default:
-              break;
-          }
-        });
-      });
-      const codeNum = BigInt(code);
-      const codeStr36 = codeNum.toString(36);
+      const codeStr36 = encode(this.states);
       this.$emit('gridChanged', codeStr36);
     },
   },
