@@ -70,6 +70,8 @@ export default {
       } else {
         this.switchOverride = false;
       }
+      // Notify grid
+      this.$emit('weeklyStatesChanged', this.day, this.states);
     },
   },
 };

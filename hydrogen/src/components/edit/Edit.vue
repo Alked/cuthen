@@ -6,7 +6,7 @@
         <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
-        <text-box :icon="'code'" v-model:code="code"/>
+        <text-box :icon="'code'" v-model:data="code"/>
         <div class="buttons">
           <button class="button" @click="onClickLoad" :disabled="loadDisabled">
             <i class="pi pi-check" v-show="loadDisabled"></i>
@@ -88,12 +88,13 @@
         </div>
       </div>
     </div>
-    <grid :showSwitch="true"/>
+    <grid :showSwitch="true" @gridChanged="onGridChanged"/>
   </div>
 </template>
 
 <script>
 import { getTimeZones } from '@vvo/tzdb';
+import forge from 'node-forge';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import DropBox from '@/components/common/input/DropBox.vue';
@@ -111,6 +112,8 @@ export default {
       copyDisabled: false,
       timezones: [],
       timezone: '',
+      nickname: '',
+      gridCode: '0',
       code: '',
     };
   },
@@ -120,6 +123,9 @@ export default {
     },
     copyLabel() {
       return this.copyDisabled ? '' : 'Copy';
+    },
+    codeBuilder() {
+      return `${this.nickname}$${this.gridCode}$${this.timezone}`;
     },
   },
   methods: {
@@ -136,6 +142,14 @@ export default {
       setTimeout(() => {
         this.copyDisabled = false;
       }, 2000);
+    },
+    onGridChanged(newCode) {
+      this.gridCode = newCode;
+    },
+  },
+  watch: {
+    codeBuilder(newCode) {
+      this.code = newCode;
     },
   },
   mounted() {
@@ -174,13 +188,16 @@ export default {
         .replace('Atlantic', 'ATL')
         .replace('Arctic', 'ARC');
       // Build timezone info
+      const md5 = forge.md.md5.create();
+      md5.update(`${shortname}:${offsetString}`);
+      const id = md5.digest().toHex().slice(0, 6);
       this.timezones.push({
         printed: `(UTC${offsetString}) ${shortname}`,
         value: zone.rawOffsetInMinutes,
-        id: `${shortname}:${offsetString}`,
+        id,
       });
       if (Intl.DateTimeFormat().resolvedOptions().timeZone === zone.name) {
-        localTimezone = `${shortname}:${offsetString}`;
+        localTimezone = id;
       }
     });
     this.timezone = localTimezone;

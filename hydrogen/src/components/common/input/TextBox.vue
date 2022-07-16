@@ -3,7 +3,7 @@
     <div class="icon">
       <i :class="['pi', `pi-${icon}`]"></i>
     </div>
-    <input type="text" v-model="data" :placeholder="placeholder">
+    <input type="text" v-model="dataLocal" :placeholder="placeholder">
   </div>
 </template>
 
@@ -13,11 +13,20 @@ export default {
   props: {
     icon: String,
     placeholder: String,
+    data: String,
   },
   data() {
     return {
-      data: '',
+      dataLocal: '',
     };
+  },
+  watch: {
+    dataLocal(newData) {
+      this.$emit('update:data', newData);
+    },
+    data(newData) {
+      this.dataLocal = newData;
+    },
   },
 };
 </script>
