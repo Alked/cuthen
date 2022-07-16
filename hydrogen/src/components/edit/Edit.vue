@@ -89,7 +89,7 @@
       </div>
     </div>
     <grid
-      :showSwitch="true"
+      :isEdittable="true"
       :codeOverride="gridCodeOverride"
       :codeOverrideNotifier="gridCodeOverrideNotifier"
       @gridChanged="onGridChanged"/>

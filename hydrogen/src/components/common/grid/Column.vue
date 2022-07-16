@@ -2,7 +2,7 @@
   <div class="column">
     <div class="day">{{day}}</div>
     <toggle-switch
-      v-show="showSwitch"
+      v-show="isEdittable"
       :switch-override="switchOverride"
       @on="allCellAvailable"
       @off="allCellUnavailable"/>
@@ -38,7 +38,7 @@ export default {
   },
   props: {
     day: String,
-    showSwitch: Boolean,
+    isEdittable: Boolean,
     dayID: Number,
     gridStateOverride: Array,
     gridStateOverrideNotifier: Number,
