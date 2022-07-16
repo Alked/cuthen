@@ -11,7 +11,6 @@
           @weeklyStatesChanged="onWeeklyStatesChanged"/>
       </div>
   </div>
-
 </template>
 
 <script>

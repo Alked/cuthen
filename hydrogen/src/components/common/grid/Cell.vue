@@ -5,7 +5,7 @@
     @mousedown="onMouseDown"
     @mouseenter="onMouseEnter"
     :style="{ background: [
-      'var(--cell-bg-color)',
+      isEditable ? 'var(--cell-bg-color)' : 'var(--cell-bg-color-uneditable)',
       'var(--cell-available-color)',
       'var(--cell-uncertain-color)'
     ][state] }">

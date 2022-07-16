@@ -43,7 +43,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 .skin-dark {
-  /* Dark */
   /* Global */
   --main-bg-color: #2d2d2d;
   --banner-text-color: #2d2d2d;
@@ -54,6 +53,7 @@ body {
   --nav-button-inactive-color: #7ea0b7;
   /* Grid */
   --cell-bg-color: #4d4d4d;
+  --cell-bg-color-uneditable: #3d3d3d;
   --cell-timespan-color: #bbb;
   --cell-timespan-active-color: #000;
   --cell-available-color: #4cb569;
@@ -70,6 +70,24 @@ body {
   --button-hover-color: #6d6d6d;
   --button-active-color: #5f5f5f;
   --button-disabled-color: #4cb569;
+  /* Card holder*/
+  --card-holder-header-color: #737373;
+  --card-holder-body-color: #4c4c4c;
+  --card-holder-scrollbar-thumb: #737373;
+  /* Participant card */
+  --participant-card-bg: #737373;
+  --participant-card-user-icon-bg: #7ea0b7;
+  --participant-card-view-button-bg: #7ea0b7;
+  --participant-card-view-button-bg-hover: #94b6cc;
+  --participant-card-view-button-bg-active: #84a7be;
+  --participant-card-delete-button-bg: #a56270;
+  --participant-card-delete-button-bg-hover: #c27f8c;
+  --participant-card-delete-button-bg-active: #b46f7d;
+  /* Suggestion card */
+  --suggestion-card-bg: #2d2d2d;
+  --suggestion-card-title-color: #ddd;
+  --suggestion-card-detail-state-pass: #4cb569;
+  --suggestion-card-detail-state-warn: #dbbc56;
 }
 .banner {
   width: 1200px;
