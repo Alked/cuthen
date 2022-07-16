@@ -6,7 +6,7 @@
         <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
-        <text-box :icon="'code'" v-model:data="code"/>
+        <text-box :icon="'code'" v-model:data="code" :selectAllOnClick="true"/>
         <div class="buttons">
           <button class="button" @click="onClickLoad" :disabled="loadDisabled">
             <i class="pi pi-check" v-show="loadDisabled"></i>
@@ -137,7 +137,7 @@ export default {
       }, 2000);
     },
     onClickCopy() {
-      // TODO: Copy to clipboard
+      navigator.clipboard.writeText(this.code);
       this.copyDisabled = true;
       setTimeout(() => {
         this.copyDisabled = false;
