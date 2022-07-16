@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vue/runtime-core": "^3.2.37",
+    "@vvo/tzdb": "^6.52.0",
     "core-js": "^3.6.5",
     "primeicons": "^5.0.0",
     "primevue": "^3.15.0",

@@ -3,7 +3,7 @@
     <div class="info-block">
       <div class="info-col">
         <text-box :icon="'user'" :placeholder="'Insert a nickname'"/>
-        <drop-box :icon="'clock'"/>
+        <drop-box :icon="'clock'" :entries="timezones" v-model:timezone="timezone"/>
       </div>
       <div class="info-col">
         <text-box :icon="'code'"/>
@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import { getTimeZones } from '@vvo/tzdb';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import DropBox from '@/components/common/input/DropBox.vue';
@@ -108,6 +109,8 @@ export default {
     return {
       loadDisabled: false,
       copyDisabled: false,
+      timezones: [],
+      timezone: null,
     };
   },
   computed: {
@@ -133,6 +136,49 @@ export default {
         this.copyDisabled = false;
       }, 2000);
     },
+  },
+  mounted() {
+    let localTimezone = '';
+    const timezones = {};
+    getTimeZones().forEach((zone) => {
+      const offsetInHours = zone.rawOffsetInMinutes / 60;
+      let offsetString = '';
+      const offsetInHoursAbs = Math.abs(offsetInHours);
+      if (offsetInHoursAbs < 10) {
+        offsetString += '0';
+      }
+      offsetString += Math.floor(offsetInHoursAbs);
+      if (offsetInHoursAbs !== Math.floor(offsetInHoursAbs)) {
+        offsetString += ':30';
+      } else {
+        offsetString += ':00';
+      }
+      if (offsetInHours < 0) {
+        offsetString = `-${offsetString}`;
+      } else {
+        offsetString = `+${offsetString}`;
+      }
+      let shortname = zone.name;
+      shortname = shortname
+        .replace('America', 'US')
+        .replace('Pacific', 'PAC')
+        .replace('Africa', 'AF')
+        .replace('Europe', 'EU')
+        .replace('Asia', 'AS')
+        .replace('Australia', 'AU')
+        .replace('India', 'IN')
+        .replace('Argentina', 'AR')
+        .replace('Antarctica', 'AN')
+        .replace('Atlantic', 'ATL');
+      timezones[shortname] = offsetString;
+      if (Intl.DateTimeFormat().resolvedOptions().timeZone === zone.name) {
+        localTimezone = shortname;
+      }
+    });
+    Object.keys(timezones).forEach((name) => {
+      this.timezones.push(`(UTC${timezones[name]}) ${name}`);
+    });
+    this.timezone = `(UTC${timezones[localTimezone]}) ${localTimezone}`;
   },
 };
 </script>

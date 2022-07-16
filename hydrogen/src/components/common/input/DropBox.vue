@@ -4,19 +4,10 @@
       <i :class="['pi', `pi-${icon}`]"></i>
     </div>
     <div class="select">
-      <select v-model="timezone">
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
-        <option value="abc">Abc</option>
+      <select v-model="tzone">
+        <option v-for="entry in entries" :key="entry" :value="entry">
+          {{ entry }}
+        </option>
       </select>
     </div>
   </div>
@@ -27,12 +18,21 @@ export default {
   name: 'DropBox',
   props: {
     icon: String,
+    entries: Array,
+    timezone: String,
   },
   data() {
     return {
-      data: '',
-      timezone: null,
+      tzone: null,
     };
+  },
+  watch: {
+    tzone(newZone) {
+      this.$emit('update:timezone', newZone);
+    },
+    timezone(newTimezone) {
+      this.tzone = newTimezone;
+    },
   },
 };
 </script>
@@ -72,7 +72,7 @@ select {
   border: none;
   font-family: 'Montserrat';
   color: #d5d5d5;
-  font-size: inherit;
+  font-size: 0.7rem;
   cursor: inherit;
   outline: none;
 }
