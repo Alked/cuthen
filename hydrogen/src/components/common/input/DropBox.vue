@@ -4,7 +4,7 @@
       <i :class="['pi', `pi-${icon}`]"></i>
     </div>
     <div class="select">
-      <select v-model="tzone">
+      <select v-model="selectedIDLocal">
         <option v-for="entry in entries" :key="entry" :value="entry.id">
           {{ entry.printed }}
         </option>
@@ -19,19 +19,19 @@ export default {
   props: {
     icon: String,
     entries: Array,
-    timezone: String,
+    selectedID: String,
   },
   data() {
     return {
-      tzone: '',
+      selectedIDLocal: '',
     };
   },
   watch: {
-    tzone(newZone) {
-      this.$emit('update:timezone', newZone);
+    selectedIDLocal(newID) {
+      this.$emit('update:selectedID', newID);
     },
-    timezone(newTimezone) {
-      this.tzone = newTimezone;
+    selectedID(newID) {
+      this.selectedIDLocal = newID;
     },
   },
 };

@@ -3,10 +3,10 @@
     <div class="info-block">
       <div class="info-col">
         <text-box :icon="'user'" :placeholder="'Insert a nickname'"/>
-        <drop-box :icon="'clock'" :entries="timezones" v-model:timezone="timezone"/>
+        <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
-        <text-box :icon="'code'"/>
+        <text-box :icon="'code'" v-model:code="code"/>
         <div class="buttons">
           <button class="button" @click="onClickLoad" :disabled="loadDisabled">
             <i class="pi pi-check" v-show="loadDisabled"></i>
@@ -111,6 +111,7 @@ export default {
       copyDisabled: false,
       timezones: [],
       timezone: '',
+      code: '',
     };
   },
   computed: {
