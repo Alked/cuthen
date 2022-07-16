@@ -90,7 +90,8 @@
     </div>
     <grid
       :showSwitch="true"
-      :codeOverride="code"
+      :codeOverride="gridCodeOverride"
+      :codeOverrideNotifier="gridCodeOverrideNotifier"
       @gridChanged="onGridChanged"/>
   </div>
 </template>
@@ -117,6 +118,8 @@ export default {
       nickname: '',
       gridCode: '0',
       code: '',
+      gridCodeOverride: '',
+      gridCodeOverrideNotifier: 0,
     };
   },
   computed: {
@@ -133,6 +136,12 @@ export default {
   methods: {
     onClickLoad() {
       // TODO: Load code to grid
+      // Digest code
+      const [name, gridcode, timezone] = this.code.split('$');
+      this.nickname = name;
+      this.gridCodeOverride = gridcode;
+      this.gridCodeOverrideNotifier += 1;
+      this.timezone = timezone;
       this.loadDisabled = true;
       setTimeout(() => {
         this.loadDisabled = false;
