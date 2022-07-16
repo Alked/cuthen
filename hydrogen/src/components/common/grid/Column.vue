@@ -2,7 +2,7 @@
   <div class="column">
     <div class="day">{{day}}</div>
     <toggle-switch
-      v-show="isEdittable"
+      v-show="isEditable"
       :switch-override="switchOverride"
       @on="allCellAvailable"
       @off="allCellUnavailable"/>
