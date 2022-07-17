@@ -135,7 +135,6 @@ export default {
   },
   methods: {
     onClickLoad() {
-      // TODO: Load code to grid
       // Digest code
       const [name, gridcode, timezone] = this.code.split('$');
       this.nickname = name;
@@ -161,12 +160,22 @@ export default {
   watch: {
     codeBuilder(newCode) {
       this.code = newCode;
+      localStorage.setItem('code', newCode);
     },
   },
   mounted() {
     // Initialise after mounted to trigger watchers and updates
     this.timezones = timezones;
     this.timezone = localtz;
+    // Load from local storage if it's present
+    if (localStorage.getItem('code')) {
+      const [name, gridcode, timezone] = localStorage.getItem('code').split('$');
+      this.nickname = name;
+      this.gridCode = gridcode;
+      this.gridCodeOverride = gridcode;
+      this.gridCodeOverrideNotifier += 1;
+      this.timezone = timezone;
+    }
   },
 };
 </script>
