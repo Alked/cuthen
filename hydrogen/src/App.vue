@@ -5,9 +5,11 @@
       <nav-bar />
     </div>
     <router-view v-slot="{ Component }">
-    <keep-alive>
-      <component :is="Component" />
-    </keep-alive>
+    <transition :name="transitionName" mode="out-in">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </transition>
   </router-view>
   </div>
 </template>
@@ -24,7 +26,31 @@ export default {
   data() {
     return {
       skin: 'dark',
+      transitionName: '',
+      refreshed: false,
     };
+  },
+  watch: {
+    $route() {
+      // To prevent animation when entering the page
+      if (this.refreshed) {
+        this.refreshed = false;
+        return;
+      }
+      switch (this.$route.fullPath) {
+        case '/edit':
+          this.transitionName = 'slide-fade-left';
+          break;
+        case '/schedule':
+          this.transitionName = 'slide-fade-right';
+          break;
+        default:
+          break;
+      }
+    },
+  },
+  created() {
+    this.refreshed = true;
   },
 };
 </script>
@@ -41,6 +67,7 @@ body {
   background: #2d2d2d;
   display: flex;
   justify-content: center;
+  overflow-x: hidden;
 }
 #app {
   -webkit-font-smoothing: antialiased;
@@ -113,5 +140,45 @@ button:hover {
 }
 button:active {
   background: var(--button-active-color);
+}
+.slide-fade-left-enter-active {
+  transition: all 250ms ease-in;
+  animation: slide-in-from-left 250ms;
+}
+.slide-fade-right-enter-active {
+  transition: all 250ms ease-in;
+  animation: slide-in-from-right 250ms;
+}
+.slide-fade-left-leave-active {
+  transition: all 250ms ease-in;
+  animation: slide-in-from-right 250ms reverse;
+}
+.slide-fade-right-leave-active {
+  transition: all 250ms ease-in;
+  animation: slide-in-from-left 250ms reverse;
+}
+@keyframes slide-in-from-left {
+  0% {
+    transform: translateX(-5rem);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(2rem);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes slide-in-from-right {
+  0% {
+    transform: translateX(5rem);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-2rem);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 </style>

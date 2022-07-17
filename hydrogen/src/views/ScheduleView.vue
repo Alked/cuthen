@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <sched />
-  </div>
+  <sched />
 </template>
 
 <script>
