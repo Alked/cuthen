@@ -148,17 +148,17 @@ export default {
   },
   methods: {
     onClickLoad() {
-      // Error handling: number of $
       const tokens = this.code.split('$');
+      const [name, gridcode, timezone] = tokens;
       let validStatus = 0;
       if (tokens.length !== 3) {
+        // Error handling: number of $
         validStatus = 1;
-      }
-      const [name, gridcode, timezone] = tokens;
-      // Error handling: gridcode validity
-      if (!gridValidate(gridcode)) validStatus = 2;
-      // Error handling: timezone match
-      if (this.timezones.find((tz) => tz.id === timezone) === undefined) {
+      } else if (!gridValidate(gridcode)) {
+        // Error handling: gridcode validity
+        validStatus = 2;
+      } else if (this.timezones.find((tz) => tz.id === timezone) === undefined) {
+        // Error handling: timezone match
         validStatus = 3;
       }
       if (validStatus > 0) {
