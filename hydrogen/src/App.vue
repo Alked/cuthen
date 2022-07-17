@@ -4,7 +4,11 @@
       <top-bar title="CUThen" version="v0.0.1"/>
       <nav-bar />
     </div>
-    <router-view/>
+    <router-view v-slot="{ Component }">
+    <keep-alive>
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
   </div>
 </template>
 
