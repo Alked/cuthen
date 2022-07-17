@@ -1,33 +1,42 @@
 <template>
   <div :class="['main', `skin-${skin}`]">
     <div class="banner">
-      <top-bar title="CUThen" version="v0.0.1"/>
+      <top-bar title="CUThen" :version="version"/>
       <nav-bar />
     </div>
     <router-view v-slot="{ Component }">
-    <transition :name="transitionName" mode="out-in">
-      <keep-alive>
-        <component :is="Component" />
-      </keep-alive>
-    </transition>
-  </router-view>
+      <transition :name="transitionName" mode="out-in">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </transition>
+    </router-view>
+    <v-footer
+      :contributors="[
+        { name: 'Alked &#128002;&#127866;', url: 'https://github.com/Alked' },
+        { name: 'Xxl-Valeria &#129453;', url: 'https://github.com/Xxl-Valeria' }
+      ]"
+      :version="version"/>
   </div>
 </template>
 
 <script>
-import TopBar from './components/common/topbar/TopBar.vue';
-import NavBar from './components/common/navbar/NavBar.vue';
+import TopBar from '@/components/common/topbar/TopBar.vue';
+import NavBar from '@/components/common/navbar/NavBar.vue';
+import VFooter from '@/components/common/footer/Footer.vue';
 
 export default {
   components: {
     TopBar,
     NavBar,
+    VFooter,
   },
   data() {
     return {
       skin: 'dark',
       transitionName: '',
       refreshed: false,
+      version: 'v0.0.13 alpha',
     };
   },
   watch: {
@@ -64,6 +73,7 @@ export default {
 }
 body {
   margin: 0;
+  width: 100%;
   background: #2d2d2d;
   display: flex;
   justify-content: center;
@@ -72,6 +82,12 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: space-between;
 }
 .skin-dark {
   /* Global */
@@ -122,6 +138,13 @@ body {
   --suggestion-card-title-color: #ddd;
   --suggestion-card-detail-state-pass: #4cb569;
   --suggestion-card-detail-state-warn: #dbbc56;
+  /* Footer */
+  --footer-bg: #597081;
+  --footer-title-border-color: #2d2d2d;
+  --footer-font-color: #2d2d2d;
+  --footer-contributor-bg: #2d2d2d;
+  --footer-contributor-font-color: #ddd;
+  --footer-version-stage-border-color: #2d2d2d;
 }
 .banner {
   width: 1200px;
