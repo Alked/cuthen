@@ -2,7 +2,11 @@
   <div class="edit-view">
     <div class="info-block">
       <div class="info-col">
-        <text-box :icon="'user'" :placeholder="'Insert a nickname'" v-model:data="nickname"/>
+        <text-box
+          :icon="'user'"
+          :placeholder="'Insert a nickname'"
+          prohibitedAlphabet="$"
+          v-model:data="nickname"/>
         <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
