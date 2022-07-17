@@ -66,8 +66,10 @@ body {
   --switch-inactive-bg-color: #597081;
   --switch-active-bg-color: #4cb569;
   --switch-toggle-color: #91a2ae;
-  /* Text box */
+  /* Input box */
   --textbox-bg-color: #5c5c5c;
+  --textbox-error-bg-color: #aa4d5a;
+  --textbox-error-msg-color: #ddd;
   --dropbox-bg-color:#464646;
   /* Button */
   --button-bg-color: #5c5c5c;
