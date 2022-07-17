@@ -71,8 +71,6 @@ function gridValidate(codeStr36) {
   // Code length validity
   const binStr = codeNum.toString(2);
   if (binStr.length > 7 * 24 * 2) return false;
-  // Code bit length validty
-  if (binStr.length % 2 !== 0) return false;
   return true;
 }
 
