@@ -5,7 +5,7 @@
     @mousedown="onMouseDown"
     @mouseenter="onMouseEnter"
     :style="{ background: [
-      'var(--cell-bg-color)',
+      isEditable ? 'var(--cell-bg-color)' : 'var(--cell-bg-color-uneditable)',
       'var(--cell-available-color)',
       'var(--cell-uncertain-color)'
     ][state] }">
@@ -33,6 +33,7 @@ export default {
     unifiedStateOverrideNotifier: Number,
     stateOverride: Array,
     stateOverrideNotifier: Number,
+    isEditable: Boolean,
   },
   data() {
     return {
@@ -88,6 +89,7 @@ export default {
   },
   methods: {
     onMouseDown(event) {
+      if (!this.isEditable) return;
       switch (event.button) {
         case 0:
           // Left mouse down
@@ -110,6 +112,7 @@ export default {
       }
     },
     onMouseEnter(event) {
+      if (!this.isEditable) return;
       if (event.buttons === 0) return;
       switch (event.buttons) {
         case 1:

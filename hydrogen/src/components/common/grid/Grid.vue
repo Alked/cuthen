@@ -5,13 +5,12 @@
           v-for='idx in 7' :key='idx'
           :day="weeks[idx - 1]"
           :dayID="idx - 1"
-          :showSwitch="showSwitch"
+          :isEditable="isEditable"
           :gridStateOverride="statesOverride"
           :gridStateOverrideNotifier="statesOverrideNotifier"
           @weeklyStatesChanged="onWeeklyStatesChanged"/>
       </div>
   </div>
-
 </template>
 
 <script>
@@ -21,7 +20,7 @@ import Column from './Column.vue';
 export default {
   name: 'Grid',
   props: {
-    showSwitch: Boolean,
+    isEditable: Boolean,
     codeOverride: String,
     codeOverrideNotifier: Number,
   },
