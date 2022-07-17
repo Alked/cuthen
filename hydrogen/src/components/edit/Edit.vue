@@ -244,7 +244,6 @@ export default {
 .info-block {
   display: flex;
   gap: 2rem;
-  margin-top: 3rem;
 }
 .info-col {
   display: flex;

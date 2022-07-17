@@ -2,9 +2,6 @@
   <div class="top-bar">
     <span class="info">
       {{ title }}
-      <span class="small">
-        &blacktriangleright; {{ version }}
-      </span>
     </span>
   </div>
 </template>
@@ -34,8 +31,5 @@ export default {
   color: var(--main-bg-color);
   font-weight: bold;
   font-size: larger;
-}
-.small {
-  font-size: small;
 }
 </style>
