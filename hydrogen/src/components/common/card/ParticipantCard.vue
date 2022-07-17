@@ -4,13 +4,13 @@
       <div class="icon">
         <i :class="['pi', `pi-user`]"></i>
       </div>
-      <span class="name" :class="{crossed: !isShown}">{{ name }}</span>
+      <span class="name" :class="{crossed: !isInvolved}">{{ name }}</span>
     </div>
     <div class="buttons">
       <button :class="['button', 'view', {long: prohibitDelete}]" @click="onClickView">
-        <i class="pi" :class="{ 'pi-eye': isShown, 'pi-eye-slash': !isShown }"></i>
+        <i class="pi" :class="{ 'pi-eye': isInvolved, 'pi-eye-slash': !isInvolved }"></i>
       </button>
-      <button class="button delete" v-if="!prohibitDelete">
+      <button class="button delete" v-if="!prohibitDelete" @click="onClickDelete">
         <i :class="['pi', `pi-trash`]"></i>
       </button>
     </div>
@@ -22,17 +22,21 @@ export default {
   name: 'ParticipantCard',
   props: {
     name: String,
+    id: String,
     prohibitDelete: Boolean,
   },
   data() {
     return {
-      isShown: true,
+      isInvolved: true,
     };
   },
   methods: {
     onClickView() {
-      // TODO: Emit to Sched.vue the new state
-      this.isShown = !this.isShown;
+      this.isInvolved = !this.isInvolved;
+      this.$emit('update:involved', this.isInvolved);
+    },
+    onClickDelete() {
+      this.$emit('deleteParticipant', this.id);
     },
   },
 };

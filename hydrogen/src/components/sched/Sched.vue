@@ -2,19 +2,31 @@
   <div class="schedule-view">
     <div class="info-block">
       <div class="info-col">
-        <text-box :icon="'code'" v-model:data="code" :selectAllOnClick="true"/>
-        <button class="button" @click="onClickInsert" :disabled="insertDisabled">
-          <i class="pi pi-check" v-show="insertDisabled"></i>
+        <text-box
+          :icon="'code'"
+          v-model:data="code"
+          :selectAllOnClick="true"
+          :errorMessage="codeErrorMessage"
+          :errorNotifier="codeErrorNotifier"/>
+        <button
+          class="button"
+          :class="{ failed: insertFailed }"
+          @click="onClickInsert"
+          :disabled="insertDisabled">
+            <i class="pi pi-check" v-show="insertDisabled && !insertFailed"></i>
+            <i class="pi pi-times" v-show="insertFailed"></i>
           {{ insertLabel }}
         </button>
       </div>
       <div class="info-col">
         <card-holder icon="users" title="Participants">
-          <participant-card name="You" :prohibitDelete="true" />
-          <participant-card name="Super duper long name"/>
-          <participant-card />
-          <participant-card />
-          <participant-card />
+          <participant-card
+            v-for="entry in orderedParticipants" :key="entry.id"
+            :name="entry.participant.name"
+            :id="entry.id"
+            :prohibitDelete="entry.id === 'main-user'"
+            @deleteParticipant="onDeleteParticipant"
+            v-model:involved="entry.participant.isInvolved"/>
         </card-holder>
       </div>
       <div class="info-col">
@@ -42,6 +54,8 @@
 </template>
 
 <script>
+import decomposeCode from '@/model/code/code';
+import { gridDecode } from '@/model/grid/gridcode';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import CardHolder from '@/components/common/cardholder/CardHolder.vue';
@@ -60,24 +74,79 @@ export default {
   data() {
     return {
       insertDisabled: false,
+      insertFailed: false,
       code: '',
+      codeErrorMessage: '',
+      codeErrorNotifier: 0,
+      participants: {},
     };
   },
   computed: {
     insertLabel() {
       return this.insertDisabled ? '' : 'Insert';
     },
+    orderedParticipants() {
+      const ordered = [];
+      Object.entries(this.participants).forEach((participant) => {
+        ordered.push({
+          id: participant[0],
+          participant: participant[1],
+        });
+      });
+      ordered.sort((a, b) => a.insertedAt > b.insertedAt);
+      return ordered;
+    },
   },
   methods: {
     onClickInsert() {
-      // TODO: insert the code into list
-      // TODO: populate it to participants
-      // TODO: include it into scheduling calculation
+      // Validate code
+      const [errorMessage, name, gridcode, timezone] = decomposeCode(this.code);
+      if (errorMessage === '') {
+        // Save participant
+        this.participants[(Math.random() * 10000000000).toFixed(0)] = {
+          name,
+          grid: gridDecode(gridcode),
+          timezone,
+          isInvolved: true,
+          insertedAt: Date.now(),
+        };
+      } else {
+        // Prompt error
+        this.codeErrorNotifier += 1;
+        this.insertFailed = true;
+        this.codeErrorMessage = errorMessage;
+      }
       this.insertDisabled = true;
       setTimeout(() => {
         this.insertDisabled = false;
+        this.insertFailed = false;
       }, 800);
     },
+    onDeleteParticipant(id) {
+      delete this.participants[id];
+    },
+  },
+  watch: {
+    participants() {
+      // Update scheduling results
+    },
+  },
+  created() {
+    // Create main user's participant entry
+    const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
+    this.participants['main-user'] = {
+      name: 'You',
+      grid: gridDecode(gridcode),
+      timezone,
+      isInvolved: true,
+      insertedAt: Date.now(),
+    };
+  },
+  activated() {
+    // Load/reload main user's code when this view is visited(activated)
+    const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
+    this.participants['main-user'].grid = gridDecode(gridcode);
+    this.participants['main-user'].timezone = timezone;
   },
 };
 </script>
@@ -105,6 +174,10 @@ export default {
 }
 .button:disabled {
   background: var(--button-disabled-color);
+  cursor: default;
+}
+.button.failed:disabled {
+  background: var(--button-disabled-failed-color);
   cursor: default;
 }
 </style>
