@@ -10,7 +10,12 @@
       <div class="icon">
         <i :class="['pi', `pi-${icon}`]"></i>
       </div>
-      <input type="text" v-model="dataLocal" :placeholder="placeholder" @click="onClick">
+      <input
+        type="text"
+        v-model="dataLocal"
+        :placeholder="placeholder"
+        @click="onClick"
+        @keydown="onKeydown">
     </div>
   </div>
 </template>
@@ -25,6 +30,7 @@ export default {
     selectAllOnClick: Boolean,
     errorMessage: String,
     errorNotifier: Number,
+    prohibitedAlphabet: String,
   },
   data() {
     return {
@@ -37,9 +43,19 @@ export default {
     onClick(event) {
       if (this.selectAllOnClick) event.target.select();
     },
+    onKeydown() {
+      this.showError = false;
+    },
   },
   watch: {
     dataLocal(newData) {
+      // Show error on prohibited characters
+      if (this.prohibitedAlphabet && this.prohibitedAlphabet.includes(newData.at(-1))) {
+        this.errorMessageLocal = `<${newData.at(-1)}> is prohibited`;
+        this.showError = true;
+        this.dataLocal = newData.slice(0, -1);
+        return;
+      }
       this.$emit('update:data', newData);
     },
     data(newData) {

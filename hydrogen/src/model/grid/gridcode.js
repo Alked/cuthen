@@ -60,7 +60,22 @@ function gridDecode(codeStr36) {
   return weeks;
 }
 
+function gridValidate(codeStr36) {
+  let codeNum = 0;
+  // Code alphabet validity
+  try {
+    codeNum = convert(codeStr36, 36);
+  } catch (RangeError) {
+    return false;
+  }
+  // Code length validity
+  const binStr = codeNum.toString(2);
+  if (binStr.length > 7 * 24 * 2) return false;
+  return true;
+}
+
 export {
   gridEncode,
   gridDecode,
+  gridValidate,
 };

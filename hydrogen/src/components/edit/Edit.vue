@@ -2,14 +2,27 @@
   <div class="edit-view">
     <div class="info-block">
       <div class="info-col">
-        <text-box :icon="'user'" :placeholder="'Insert a nickname'" v-model:data="nickname"/>
+        <text-box
+          :icon="'user'"
+          :placeholder="'Insert a nickname'"
+          prohibitedAlphabet="$"
+          v-model:data="nickname"/>
         <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
-        <text-box :icon="'code'" v-model:data="code" :selectAllOnClick="true"/>
+        <text-box
+          :icon="'code'"
+          v-model:data="code"
+          :selectAllOnClick="true"
+          :errorMessage="codeErrorMessage"
+          :errorNotifier="codeErrorNotifier"/>
         <div class="buttons">
-          <button class="button" @click="onClickLoad" :disabled="loadDisabled">
-            <i class="pi pi-check" v-show="loadDisabled"></i>
+          <button class="button"
+            @click="onClickLoad"
+            :disabled="loadDisabled"
+            :class="{ failed: loadFailed }">
+            <i class="pi pi-check" v-show="loadDisabled && !loadFailed"></i>
+            <i class="pi pi-times" v-show="loadFailed"></i>
             {{ loadLabel }}
           </button>
           <button class="button" @click="onClickCopy" :disabled="copyDisabled">
@@ -98,6 +111,7 @@
 
 <script>
 import { timezones, localtz } from '@/model/edit/timezones';
+import { gridValidate } from '@/model/grid/gridcode';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import DropBox from '@/components/common/input/DropBox.vue';
@@ -112,6 +126,7 @@ export default {
   data() {
     return {
       loadDisabled: false,
+      loadFailed: false,
       copyDisabled: false,
       timezones: [],
       timezone: '',
@@ -120,6 +135,8 @@ export default {
       code: '',
       gridCodeOverride: '',
       gridCodeOverrideNotifier: 0,
+      codeErrorMessage: '',
+      codeErrorNotifier: 0,
     };
   },
   computed: {
@@ -135,15 +152,46 @@ export default {
   },
   methods: {
     onClickLoad() {
-      // Digest code
-      const [name, gridcode, timezone] = this.code.split('$');
-      this.nickname = name;
-      this.gridCodeOverride = gridcode;
-      this.gridCodeOverrideNotifier += 1;
-      this.timezone = timezone;
+      const tokens = this.code.split('$');
+      const [name, gridcode, timezone] = tokens;
+      let validStatus = 0;
+      if (tokens.length !== 3) {
+        // Error handling: number of $
+        validStatus = 1;
+      } else if (!gridValidate(gridcode)) {
+        // Error handling: gridcode validity
+        validStatus = 2;
+      } else if (this.timezones.find((tz) => tz.id === timezone) === undefined) {
+        // Error handling: timezone match
+        validStatus = 3;
+      }
+      if (validStatus > 0) {
+        switch (validStatus) {
+          case 1:
+            this.codeErrorMessage = 'Corrupted code: bad format';
+            break;
+          case 2:
+            this.codeErrorMessage = 'Corrupted code: bad grid code';
+            break;
+          case 3:
+            this.codeErrorMessage = 'Corrupted code: bad timezone';
+            break;
+          default:
+            this.codeErrorMessage = 'Corrupted code: unknwon';
+        }
+        this.codeErrorNotifier += 1;
+        this.loadFailed = true;
+      } else {
+        // Digest code
+        this.nickname = name;
+        this.gridCodeOverride = gridcode;
+        this.gridCodeOverrideNotifier += 1;
+        this.timezone = timezone;
+      }
       this.loadDisabled = true;
       setTimeout(() => {
         this.loadDisabled = false;
+        this.loadFailed = false;
       }, 2000);
     },
     onClickCopy() {
@@ -161,6 +209,11 @@ export default {
     codeBuilder(newCode) {
       this.code = newCode;
       localStorage.setItem('code', newCode);
+    },
+    code() {
+      // Remove error as soon as code is editted (manually or automatically)
+      this.codeErrorMessage = '';
+      this.codeErrorNotifier += 1;
     },
   },
   mounted() {
@@ -211,6 +264,10 @@ export default {
 }
 .button:disabled {
   background: var(--button-disabled-color);
+  cursor: default;
+}
+.button.failed:disabled {
+  background: var(--button-disabled-failed-color);
   cursor: default;
 }
 .help {

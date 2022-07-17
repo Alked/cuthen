@@ -76,6 +76,7 @@ body {
   --button-hover-color: #6d6d6d;
   --button-active-color: #5f5f5f;
   --button-disabled-color: #4cb569;
+  --button-disabled-failed-color: #aa4d5a;
   /* Card holder*/
   --card-holder-header-color: #737373;
   --card-holder-body-color: #4c4c4c;
