@@ -119,14 +119,16 @@ export default {
     },
   },
   created() {
-    // Listen to window resize
+    // Listen to window resize and scroll
     window.addEventListener('resize', this.updateCellPos);
+    window.addEventListener('scroll', this.updateCellPos);
   },
   mounted() {
     this.updateCellPos();
   },
   unmounted() {
     window.removeEventListener('resize', this.updateCellPos);
+    window.removeEventListener('scroll', this.updateCellPos);
   },
 };
 </script>
