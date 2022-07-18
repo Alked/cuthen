@@ -8,13 +8,13 @@
       isEditable ? 'var(--cell-bg-color)' : 'var(--cell-bg-color-uneditable)',
       'var(--cell-available-color)',
       'var(--cell-uncertain-color)'
-    ][state] }">
+    ][cellState] }">
     <span
       class="timespan"
       ref="timespan"
       :style="{
         opacity: `${opacity}%`,
-        color: state === 0 ? 'var(--cell-timespan-color)'
+        color: cellState === 0 ? 'var(--cell-timespan-color)'
           : 'var(--cell-timespan-active-color)'
       }">
       {{ timespan }}
@@ -23,68 +23,39 @@
 </template>
 
 <script>
+import { times } from '@/model/data/data';
+
 export default {
   name: 'Cell',
   props: {
-    cellID: Number,
     end: Number,
     mousePos: Array,
-    unifiedStateOverride: Number,
-    unifiedStateOverrideNotifier: Number,
-    stateOverride: Array,
-    stateOverrideNotifier: Number,
+    cellState: Number,
     isEditable: Boolean,
   },
   data() {
     return {
-      state: 0,
-      opacity: 0,
+      cellPos: [0, 0],
     };
   },
   computed: {
     timespan() {
-      let { start, end } = { start: this.end - 1, end: this.end };
-      let startTag = 'AM';
-      let endTag = 'AM';
-      if (start >= 12) startTag = 'PM';
-      if (end >= 12) endTag = 'PM';
-      if (start >= 13) start -= 12;
-      if (end >= 13) end -= 12;
-      if (end === 12 && endTag === 'PM') {
-        end = 0;
-        endTag = 'AM';
-      }
-      return `${start} ${startTag} - ${end} ${endTag}`;
+      const { start, end } = { start: this.end - 1, end: this.end };
+      return `${times[start]} - ${times[end]}`;
     },
-  },
-  watch: {
-    mousePos(newPos) {
-      if (this.state !== 0) {
-        this.opacity = 100;
-        return;
+    opacity() {
+      if (this.cellState !== 0) {
+        return 100;
       }
-      if (newPos[0] === -1) {
-        this.opacity = 0;
-        return;
+      if (this.mousePos[0] === -1) {
+        return 0;
       }
       const maxDistance = 400;
-      const mouseX = newPos[0];
-      const mouseY = newPos[1];
-      const posLabel = this.$refs.timespan.getBoundingClientRect();
-      let distance = Math.sqrt((mouseX - posLabel.x) ** 2 + (mouseY - posLabel.y) ** 2);
+      const mouseX = this.mousePos[0];
+      const mouseY = this.mousePos[1];
+      let distance = Math.sqrt((mouseX - this.cellPos.x) ** 2 + (mouseY - this.cellPos.y) ** 2);
       if (distance > maxDistance) distance = maxDistance;
-      this.opacity = (1 - distance / maxDistance) * 100;
-    },
-    unifiedStateOverrideNotifier() {
-      this.state = this.unifiedStateOverride;
-      this.opacity = this.state === 0 ? 0 : 100;
-    },
-    stateOverrideNotifier() {
-      this.state = this.stateOverride[this.cellID];
-      this.opacity = this.state === 0 ? 0 : 100;
-    },
-    state(newState) {
-      this.$emit('stateChange', this.cellID, newState);
+      return (1 - distance / maxDistance) * 100;
     },
   },
   methods: {
@@ -93,18 +64,18 @@ export default {
       switch (event.button) {
         case 0:
           // Left mouse down
-          if (this.state > 0) {
-            this.state = 0;
+          if (this.cellState > 0) {
+            this.$emit('update:cellState', 0);
           } else {
-            this.state = 1;
+            this.$emit('update:cellState', 1);
           }
           break;
         case 2:
           // Right mouse down
-          if (this.state > 1) {
-            this.state = 0;
+          if (this.cellState > 1) {
+            this.$emit('update:cellState', 0);
           } else {
-            this.state = 2;
+            this.$emit('update:cellState', 2);
           }
           break;
         default:
@@ -117,24 +88,39 @@ export default {
       switch (event.buttons) {
         case 1:
           // Left mouse down
-          if (this.state > 0) {
-            this.state = 0;
+          if (this.cellState > 0) {
+            this.$emit('update:cellState', 0);
           } else {
-            this.state = 1;
+            this.$emit('update:cellState', 1);
           }
           break;
         case 2:
           // Right mouse down
-          if (this.state > 1) {
-            this.state = 0;
+          if (this.cellState > 1) {
+            this.$emit('update:cellState', 0);
           } else {
-            this.state = 2;
+            this.$emit('update:cellState', 2);
           }
           break;
         default:
           break;
       }
     },
+    updateCellPos() {
+      this.cellPos = this.$refs.timespan.getBoundingClientRect();
+    },
+  },
+  created() {
+    // Listen to window resize and scroll
+    window.addEventListener('resize', this.updateCellPos);
+    window.addEventListener('scroll', this.updateCellPos);
+  },
+  activated() {
+    this.updateCellPos();
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.updateCellPos);
+    window.removeEventListener('scroll', this.updateCellPos);
   },
 };
 </script>

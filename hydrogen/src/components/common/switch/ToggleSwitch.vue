@@ -22,22 +22,12 @@
 export default {
   name: 'ToggleSwitch',
   props: {
-    switchOverride: Boolean,
-  },
-  data() {
-    return {
-      isOn: false,
-    };
+    isOn: Boolean,
   },
   methods: {
     onClick() {
-      this.isOn = !this.isOn;
-      this.$emit(this.isOn ? 'on' : 'off');
-    },
-  },
-  watch: {
-    switchOverride(newState) {
-      this.isOn = newState;
+      this.$emit('update:isOn', !this.isOn);
+      this.$emit('switched', !this.isOn);
     },
   },
 };

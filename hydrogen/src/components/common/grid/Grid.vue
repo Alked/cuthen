@@ -3,52 +3,44 @@
       <div class='columns'>
         <column
           v-for='idx in 7' :key='idx'
-          :day="weeks[idx - 1]"
-          :dayID="idx - 1"
+          :day="daysAbbr[idx - 1]"
           :isEditable="isEditable"
-          :gridStateOverride="statesOverride"
-          :gridStateOverrideNotifier="statesOverrideNotifier"
-          @weeklyStatesChanged="onWeeklyStatesChanged"/>
+          v-model:weeklyState="weeklyStates[idx - 1]"/>
       </div>
   </div>
 </template>
 
 <script>
 import { gridEncode, gridDecode } from '@/model/grid/gridcode';
+import { daysAbbr } from '@/model/data/data';
 import Column from './Column.vue';
 
 export default {
   name: 'Grid',
   props: {
     isEditable: Boolean,
-    codeOverride: String,
-    codeOverrideNotifier: Number,
+    gridcode: String,
   },
   data() {
     return {
-      weeks: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      states: [...new Array(7)].map(() => [...new Array(24)].map(() => 0)),
-      statesOverride: [],
-      statesOverrideNotifier: 0,
+      daysAbbr,
+      weeklyStates: [...new Array(7)].map(() => [...new Array(24)].map(() => 0)),
     };
   },
   components: {
     Column,
   },
-  methods: {
-    onWeeklyStatesChanged(day, newState) {
-      // Update states upwards
-      const dayIdx = this.weeks.indexOf(day);
-      this.states[dayIdx] = newState;
-      const codeStr36 = gridEncode(this.states);
-      this.$emit('gridChanged', codeStr36);
-    },
-  },
   watch: {
-    codeOverrideNotifier() {
+    gridcode() {
       // Update states downwards
-      this.statesOverride = gridDecode(this.codeOverride);
-      this.statesOverrideNotifier += 1;
+      this.weeklyStates = gridDecode(this.gridcode);
+    },
+    weeklyStates: {
+      handler() {
+        const codeStr36 = gridEncode(this.weeklyStates);
+        this.$emit('update:gridcode', codeStr36);
+      },
+      deep: true,
     },
   },
 };

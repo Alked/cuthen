@@ -1,11 +1,10 @@
 <template>
   <div class="column">
-    <div class="day">{{day}}</div>
+    <div class="day">{{ day }}</div>
     <toggle-switch
       v-show="isEditable"
-      :switch-override="switchOverride"
-      @on="allCellAvailable"
-      @off="allCellUnavailable"/>
+      v-model:isOn="isAllAvailable"
+      @switched="onAllCellStateSwitched"/>
     <div
         @mousemove="updateCellLabelOpacity"
         @mouseleave="hideCellLabels"
@@ -14,14 +13,9 @@
         v-for="idx in 24"
         :key="idx"
         :end="idx"
-        :cellID="idx - 1"
-        :mouse-pos="mousePos"
-        :unified-state-override="unifiedStateOverride"
-        :unified-state-override-notifier="unifiedStateOverrideNotifier"
-        :state-override="stateOverride"
-        :state-override-notifier="stateOverrideNotifier"
+        :mousePos="mousePos"
         :isEditable="isEditable"
-        @stateChange="onStateChange"
+        v-model:cellState="cellStates[idx - 1]"
       />
     </div>
   </div>
@@ -40,27 +34,14 @@ export default {
   props: {
     day: String,
     isEditable: Boolean,
-    dayID: Number,
-    gridStateOverride: Array,
-    gridStateOverrideNotifier: Number,
+    weeklyState: Array,
   },
   data() {
     return {
       mousePos: [0, 0],
-      unifiedStateOverride: 0,
-      unifiedStateOverrideNotifier: 0,
-      stateOverride: [],
-      stateOverrideNotifier: 0,
-      states: [...new Array(24)].map(() => 0),
-      switchOverride: false,
+      cellStates: [...new Array(24)].map(() => 0),
+      isAllAvailable: false,
     };
-  },
-  watch: {
-    gridStateOverrideNotifier() {
-      // Notify cells to update themselves
-      this.stateOverride = this.gridStateOverride[this.dayID];
-      this.stateOverrideNotifier += 1;
-    },
   },
   methods: {
     updateCellLabelOpacity(event) {
@@ -69,25 +50,27 @@ export default {
     hideCellLabels() {
       this.mousePos = [-1];
     },
-    allCellAvailable() {
-      this.switchOverride = true;
-      this.unifiedStateOverride = 1;
-      this.unifiedStateOverrideNotifier += 1;
-    },
-    allCellUnavailable() {
-      this.switchOverride = false;
-      this.unifiedStateOverride = 0;
-      this.unifiedStateOverrideNotifier += 1;
-    },
-    onStateChange(cellID, newState) {
-      this.states[cellID] = newState;
-      if (this.states.every((elem) => elem > 0)) {
-        this.switchOverride = true;
+    onAllCellStateSwitched(newState) {
+      if (newState) {
+        this.cellStates = [...new Array(24)].map(() => 1);
       } else {
-        this.switchOverride = false;
+        this.cellStates = [...new Array(24)].map(() => 0);
+      }
+    },
+  },
+  watch: {
+    weeklyState(newWeeklyState) {
+      this.cellStates = newWeeklyState;
+    },
+    cellStates(newCellStates) {
+      // Toggle switch automatically
+      if (newCellStates.every((elem) => elem > 0)) {
+        this.isAllAvailable = true;
+      } else {
+        this.isAllAvailable = false;
       }
       // Notify grid
-      this.$emit('weeklyStatesChanged', this.day, this.states);
+      this.$emit('update:weeklyState', newCellStates);
     },
   },
 };

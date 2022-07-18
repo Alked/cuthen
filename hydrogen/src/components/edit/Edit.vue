@@ -103,15 +103,13 @@
     </div>
     <grid
       :isEditable="true"
-      :codeOverride="gridCodeOverride"
-      :codeOverrideNotifier="gridCodeOverrideNotifier"
-      @gridChanged="onGridChanged"/>
+      v-model:gridcode="this.gridcode"/>
   </div>
 </template>
 
 <script>
 import { timezones, localtz } from '@/model/edit/timezones';
-import { gridValidate } from '@/model/grid/gridcode';
+import decomposeCode from '@/model/code/code';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import DropBox from '@/components/common/input/DropBox.vue';
@@ -131,10 +129,8 @@ export default {
       timezones: [],
       timezone: '',
       nickname: '',
-      gridCode: '0',
+      gridcode: '0',
       code: '',
-      gridCodeOverride: '',
-      gridCodeOverrideNotifier: 0,
       codeErrorMessage: '',
       codeErrorNotifier: 0,
     };
@@ -147,46 +143,22 @@ export default {
       return this.copyDisabled ? '' : 'Copy';
     },
     codeBuilder() {
-      return `${this.nickname}$${this.gridCode}$${this.timezone}`;
+      return `${this.nickname}$${this.gridcode}$${this.timezone}`;
     },
   },
   methods: {
     onClickLoad() {
-      const tokens = this.code.split('$');
-      const [name, gridcode, timezone] = tokens;
-      let validStatus = 0;
-      if (tokens.length !== 3) {
-        // Error handling: number of $
-        validStatus = 1;
-      } else if (!gridValidate(gridcode)) {
-        // Error handling: gridcode validity
-        validStatus = 2;
-      } else if (this.timezones.find((tz) => tz.id === timezone) === undefined) {
-        // Error handling: timezone match
-        validStatus = 3;
-      }
-      if (validStatus > 0) {
-        switch (validStatus) {
-          case 1:
-            this.codeErrorMessage = 'Corrupted code: bad format';
-            break;
-          case 2:
-            this.codeErrorMessage = 'Corrupted code: bad grid code';
-            break;
-          case 3:
-            this.codeErrorMessage = 'Corrupted code: bad timezone';
-            break;
-          default:
-            this.codeErrorMessage = 'Corrupted code: unknwon';
-        }
-        this.codeErrorNotifier += 1;
-        this.loadFailed = true;
-      } else {
+      const [errorMessage, name, gridcode, timezone] = decomposeCode(this.code);
+      if (errorMessage === '') {
         // Digest code
         this.nickname = name;
-        this.gridCodeOverride = gridcode;
-        this.gridCodeOverrideNotifier += 1;
+        this.gridcode = gridcode;
         this.timezone = timezone;
+      } else {
+        // Prompt error
+        this.codeErrorNotifier += 1;
+        this.loadFailed = true;
+        this.codeErrorMessage = errorMessage;
       }
       this.loadDisabled = true;
       setTimeout(() => {
@@ -200,9 +172,6 @@ export default {
       setTimeout(() => {
         this.copyDisabled = false;
       }, 2000);
-    },
-    onGridChanged(newCode) {
-      this.gridCode = newCode;
     },
   },
   watch: {
@@ -224,9 +193,7 @@ export default {
     if (localStorage.getItem('code')) {
       const [name, gridcode, timezone] = localStorage.getItem('code').split('$');
       this.nickname = name;
-      this.gridCode = gridcode;
-      this.gridCodeOverride = gridcode;
-      this.gridCodeOverrideNotifier += 1;
+      this.gridcode = gridcode;
       this.timezone = timezone;
     }
   },
