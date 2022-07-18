@@ -22,11 +22,11 @@
         <card-holder icon="users" title="Participants">
           <participant-card
             v-for="entry in orderedParticipants" :key="entry.id"
-            :name="entry.participant.name"
+            :name="entry.details.name"
             :id="entry.id"
             :prohibitDelete="entry.id === 'main-user'"
             @deleteParticipant="onDeleteParticipant"
-            v-model:involved="entry.participant.isInvolved"/>
+            v-model:involved="entry.details.isInvolved"/>
         </card-holder>
       </div>
       <div class="info-col">
@@ -87,13 +87,13 @@ export default {
     },
     orderedParticipants() {
       const ordered = [];
-      Object.entries(this.participants).forEach((participant) => {
+      Object.keys(this.participants).forEach((id) => {
         ordered.push({
-          id: participant[0],
-          participant: participant[1],
+          id,
+          details: this.participants[id],
         });
       });
-      ordered.sort((a, b) => a.insertedAt > b.insertedAt);
+      ordered.sort((a, b) => a.details.insertedAt - b.details.insertedAt);
       return ordered;
     },
   },
