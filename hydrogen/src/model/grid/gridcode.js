@@ -38,17 +38,22 @@ function gridEncode(weeklyStates) {
   return codeStr36;
 }
 
-function convert(value, radix) {
+function baseN2BigInt(value, radix) {
   return [...value.toString()]
     .reduce((r, v) => r * BigInt(radix) + BigInt(parseInt(v, radix)), 0n);
 }
 
-function gridDecode(codeStr36) {
-  const codeNum = convert(codeStr36, 36);
-  let binStr = codeNum.toString(2);
-  while (binStr.length < 7 * 24 * 2) {
-    binStr = `0${binStr}`;
+function padding(binStr) {
+  let padded = binStr;
+  while (padded.length < 7 * 24 * 2) {
+    padded = `0${padded}`;
   }
+  return padded;
+}
+
+function gridDecode(codeStr36) {
+  const codeNum = baseN2BigInt(codeStr36, 36);
+  const binStr = padding(codeNum.toString(2));
   const weeks = [...new Array(7)].map(() => [...new Array(24)].map(() => 0));
   let cur = 0;
   for (let weekIdx = 0; weekIdx < 7; weekIdx += 1) {
@@ -64,7 +69,7 @@ function gridValidate(codeStr36) {
   let codeNum = 0;
   // Code alphabet validity
   try {
-    codeNum = convert(codeStr36, 36);
+    codeNum = baseN2BigInt(codeStr36, 36);
   } catch (RangeError) {
     return false;
   }
@@ -74,8 +79,21 @@ function gridValidate(codeStr36) {
   return true;
 }
 
+function gridAggregate(gridcodes) {
+  if (gridcodes.length === 0) return '0';
+  // Load first grid as basis
+  let result = baseN2BigInt(gridcodes[0], 36);
+  // calculate with OR
+  gridcodes.slice(1).forEach((gridcode) => {
+    /* eslint no-bitwise: 0 */
+    result &= baseN2BigInt(gridcode, 36);
+  });
+  return result.toString(36);
+}
+
 export {
   gridEncode,
   gridDecode,
   gridValidate,
+  gridAggregate,
 };
