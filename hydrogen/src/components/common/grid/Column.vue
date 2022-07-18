@@ -3,7 +3,7 @@
     <div class="day">{{ day }}</div>
     <toggle-switch
       v-show="isEditable"
-      :switch-override="switchOverride"
+      v-model:isOn="isAllAvailable"
       @on="allCellAvailable"
       @off="allCellUnavailable"/>
     <div
@@ -41,7 +41,7 @@ export default {
     return {
       mousePos: [0, 0],
       cellStates: [...new Array(24)].map(() => 0),
-      switchOverride: false,
+      isAllAvailable: false,
     };
   },
   methods: {
@@ -51,14 +51,6 @@ export default {
     hideCellLabels() {
       this.mousePos = [-1];
     },
-    allCellAvailable() {
-      this.switchOverride = true;
-      this.$emit('update:weeklyState', [...new Array(24)].map(() => 1));
-    },
-    allCellUnavailable() {
-      this.switchOverride = false;
-      this.$emit('update:weeklyState', [...new Array(24)].map(() => 0));
-    },
   },
   watch: {
     weeklyState(newWeeklyState) {
@@ -67,9 +59,9 @@ export default {
     cellStates(newCellStates) {
       // Toggle switch automatically
       if (newCellStates.every((elem) => elem > 0)) {
-        this.switchOverride = true;
+        this.isAllAvailable = true;
       } else {
-        this.switchOverride = false;
+        this.isAllAvailable = false;
       }
       // Notify grid
       this.$emit('update:weeklyState', newCellStates);
