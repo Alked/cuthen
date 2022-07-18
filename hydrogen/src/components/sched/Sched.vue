@@ -44,7 +44,7 @@
 
 <script>
 import decomposeCode from '@/model/code/code';
-import { gridAggregate, gridGroup } from '@/model/grid/gridcode';
+import { gridAggregate, gridGroup, findUncertain } from '@/model/grid/gridcode';
 import { days, times } from '@/model/data/data';
 import makeSuggestions from '@/model/schedule/schedule';
 import Grid from '@/components/common/grid/Grid.vue';
@@ -96,7 +96,36 @@ export default {
         if (suggestion.state === 1) {
           details.push('Everyone is available');
         } else {
-          // TODO: Find who is not compatible with this suggestion
+          // Find who is not compatible with this suggestion
+          Object.keys(this.participants).forEach((id) => {
+            const uncertainGroups = findUncertain(
+              this.participants[id].gridcode,
+              suggestion,
+            );
+            if (uncertainGroups.length !== 0) {
+              let detail;
+              if (id === 'main-user') {
+                detail = 'You are uncertain for';
+              } else {
+                detail = `${this.participants[id].name} is uncertain for`;
+              }
+              // Build uncertain time slot string
+              let slotsVisualised = '';
+              uncertainGroups.forEach((group, idx) => {
+                const groupStart = times[group.start];
+                const groupEnd = times[group.end];
+                slotsVisualised = slotsVisualised.concat(`${groupStart} - ${groupEnd}`);
+                if (uncertainGroups.length === 2 && idx === 0) {
+                  slotsVisualised = slotsVisualised.concat(' and ');
+                } else if (idx < uncertainGroups.length - 2) {
+                  slotsVisualised = slotsVisualised.concat(', ');
+                } else if (uncertainGroups.length > 2 && idx === uncertainGroups.length - 2) {
+                  slotsVisualised = slotsVisualised.concat(' and ');
+                }
+              });
+              details.push(`${detail} ${slotsVisualised}`);
+            }
+          });
         }
         visualised.push({
           title: `${days[suggestion.day]} ${times[suggestion.start]} - ${times[suggestion.end]}`,

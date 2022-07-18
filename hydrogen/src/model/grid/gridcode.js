@@ -121,10 +121,19 @@ function gridGroup(gridcode) {
   return groups;
 }
 
+function findUncertain(code, range) {
+  const groups = gridGroup(code)
+    .filter((group) => group.day === range.day)
+    .filter((group) => group.state === 2)
+    .filter((group) => group.start >= range.start && group.end <= range.end);
+  return groups;
+}
+
 export {
   gridEncode,
   gridDecode,
   gridValidate,
   gridAggregate,
   gridGroup,
+  findUncertain,
 };
