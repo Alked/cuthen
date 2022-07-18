@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { times } from '@/model/data/data';
+
 export default {
   name: 'Cell',
   props: {
@@ -38,18 +40,8 @@ export default {
   },
   computed: {
     timespan() {
-      let { start, end } = { start: this.end - 1, end: this.end };
-      let startTag = 'AM';
-      let endTag = 'AM';
-      if (start >= 12) startTag = 'PM';
-      if (end >= 12) endTag = 'PM';
-      if (start >= 13) start -= 12;
-      if (end >= 13) end -= 12;
-      if (end === 12 && endTag === 'PM') {
-        end = 0;
-        endTag = 'AM';
-      }
-      return `${start} ${startTag} - ${end} ${endTag}`;
+      const { start, end } = { start: this.end - 1, end: this.end };
+      return `${times[start]} - ${times[end]}`;
     },
     opacity() {
       if (this.cellState !== 0) {

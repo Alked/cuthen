@@ -3,7 +3,7 @@
       <div class='columns'>
         <column
           v-for='idx in 7' :key='idx'
-          :day="weeks[idx - 1]"
+          :day="daysAbbr[idx - 1]"
           :isEditable="isEditable"
           v-model:weeklyState="weeklyStates[idx - 1]"/>
       </div>
@@ -12,6 +12,7 @@
 
 <script>
 import { gridEncode, gridDecode } from '@/model/grid/gridcode';
+import { daysAbbr } from '@/model/data/data';
 import Column from './Column.vue';
 
 export default {
@@ -22,7 +23,7 @@ export default {
   },
   data() {
     return {
-      weeks: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      daysAbbr,
       weeklyStates: [...new Array(7)].map(() => [...new Array(24)].map(() => 0)),
     };
   },
