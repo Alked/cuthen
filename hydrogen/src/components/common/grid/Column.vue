@@ -4,8 +4,7 @@
     <toggle-switch
       v-show="isEditable"
       v-model:isOn="isAllAvailable"
-      @on="allCellAvailable"
-      @off="allCellUnavailable"/>
+      @switched="onAllCellStateSwitched"/>
     <div
         @mousemove="updateCellLabelOpacity"
         @mouseleave="hideCellLabels"
@@ -50,6 +49,13 @@ export default {
     },
     hideCellLabels() {
       this.mousePos = [-1];
+    },
+    onAllCellStateSwitched(newState) {
+      if (newState) {
+        this.cellStates = [...new Array(24)].map(() => 1);
+      } else {
+        this.cellStates = [...new Array(24)].map(() => 0);
+      }
     },
   },
   watch: {

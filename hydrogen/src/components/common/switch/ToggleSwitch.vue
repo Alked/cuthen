@@ -27,6 +27,7 @@ export default {
   methods: {
     onClick() {
       this.$emit('update:isOn', !this.isOn);
+      this.$emit('switched', !this.isOn);
     },
   },
 };
