@@ -123,7 +123,7 @@ export default {
     window.addEventListener('resize', this.updateCellPos);
     window.addEventListener('scroll', this.updateCellPos);
   },
-  mounted() {
+  activated() {
     this.updateCellPos();
   },
   unmounted() {
