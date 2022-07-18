@@ -103,9 +103,7 @@
     </div>
     <grid
       :isEditable="true"
-      :codeOverride="gridCodeOverride"
-      :codeOverrideNotifier="gridCodeOverrideNotifier"
-      @gridChanged="onGridChanged"/>
+      v-model:gridcode="this.gridcode"/>
   </div>
 </template>
 
@@ -131,10 +129,8 @@ export default {
       timezones: [],
       timezone: '',
       nickname: '',
-      gridCode: '0',
+      gridcode: '0',
       code: '',
-      gridCodeOverride: '',
-      gridCodeOverrideNotifier: 0,
       codeErrorMessage: '',
       codeErrorNotifier: 0,
     };
@@ -147,7 +143,7 @@ export default {
       return this.copyDisabled ? '' : 'Copy';
     },
     codeBuilder() {
-      return `${this.nickname}$${this.gridCode}$${this.timezone}`;
+      return `${this.nickname}$${this.gridcode}$${this.timezone}`;
     },
   },
   methods: {
@@ -156,8 +152,7 @@ export default {
       if (errorMessage === '') {
         // Digest code
         this.nickname = name;
-        this.gridCodeOverride = gridcode;
-        this.gridCodeOverrideNotifier += 1;
+        this.gridcode = gridcode;
         this.timezone = timezone;
       } else {
         // Prompt error
@@ -177,9 +172,6 @@ export default {
       setTimeout(() => {
         this.copyDisabled = false;
       }, 2000);
-    },
-    onGridChanged(newCode) {
-      this.gridCode = newCode;
     },
   },
   watch: {
@@ -201,9 +193,7 @@ export default {
     if (localStorage.getItem('code')) {
       const [name, gridcode, timezone] = localStorage.getItem('code').split('$');
       this.nickname = name;
-      this.gridCode = gridcode;
-      this.gridCodeOverride = gridcode;
-      this.gridCodeOverrideNotifier += 1;
+      this.gridcode = gridcode;
       this.timezone = timezone;
     }
   },

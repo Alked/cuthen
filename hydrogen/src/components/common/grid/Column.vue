@@ -1,6 +1,6 @@
 <template>
   <div class="column">
-    <div class="day">{{day}}</div>
+    <div class="day">{{ day }}</div>
     <toggle-switch
       v-show="isEditable"
       :switch-override="switchOverride"
@@ -14,14 +14,9 @@
         v-for="idx in 24"
         :key="idx"
         :end="idx"
-        :cellID="idx - 1"
-        :mouse-pos="mousePos"
-        :unified-state-override="unifiedStateOverride"
-        :unified-state-override-notifier="unifiedStateOverrideNotifier"
-        :state-override="stateOverride"
-        :state-override-notifier="stateOverrideNotifier"
+        :mousePos="mousePos"
         :isEditable="isEditable"
-        @stateChange="onStateChange"
+        v-model:cellState="cellStates[idx - 1]"
       />
     </div>
   </div>
@@ -40,27 +35,14 @@ export default {
   props: {
     day: String,
     isEditable: Boolean,
-    dayID: Number,
-    gridStateOverride: Array,
-    gridStateOverrideNotifier: Number,
+    weeklyState: Array,
   },
   data() {
     return {
       mousePos: [0, 0],
-      unifiedStateOverride: 0,
-      unifiedStateOverrideNotifier: 0,
-      stateOverride: [],
-      stateOverrideNotifier: 0,
-      states: [...new Array(24)].map(() => 0),
+      cellStates: [...new Array(24)].map(() => 0),
       switchOverride: false,
     };
-  },
-  watch: {
-    gridStateOverrideNotifier() {
-      // Notify cells to update themselves
-      this.stateOverride = this.gridStateOverride[this.dayID];
-      this.stateOverrideNotifier += 1;
-    },
   },
   methods: {
     updateCellLabelOpacity(event) {
@@ -71,23 +53,26 @@ export default {
     },
     allCellAvailable() {
       this.switchOverride = true;
-      this.unifiedStateOverride = 1;
-      this.unifiedStateOverrideNotifier += 1;
+      this.$emit('update:weeklyState', [...new Array(24)].map(() => 1));
     },
     allCellUnavailable() {
       this.switchOverride = false;
-      this.unifiedStateOverride = 0;
-      this.unifiedStateOverrideNotifier += 1;
+      this.$emit('update:weeklyState', [...new Array(24)].map(() => 0));
     },
-    onStateChange(cellID, newState) {
-      this.states[cellID] = newState;
-      if (this.states.every((elem) => elem > 0)) {
+  },
+  watch: {
+    weeklyState(newWeeklyState) {
+      this.cellStates = newWeeklyState;
+    },
+    cellStates(newCellStates) {
+      // Toggle switch automatically
+      if (newCellStates.every((elem) => elem > 0)) {
         this.switchOverride = true;
       } else {
         this.switchOverride = false;
       }
       // Notify grid
-      this.$emit('weeklyStatesChanged', this.day, this.states);
+      this.$emit('update:weeklyState', newCellStates);
     },
   },
 };
