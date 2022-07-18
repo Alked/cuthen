@@ -5,7 +5,7 @@
     </span>
     <span
       class="detail"
-      :class="{green: state === 0, yellow: state === 1}"
+      :class="{green: state === 1, yellow: state === 2}"
       v-for="detail in details" :key="detail">
       {{ detail }}
     </span>

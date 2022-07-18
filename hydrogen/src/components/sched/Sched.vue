@@ -31,21 +31,10 @@
       </div>
       <div class="info-col">
         <card-holder icon="check-circle" title="Suggestions">
-          <suggestion-card
-            title="Wednesday 10AM - 12PM"
-            :details="['Everyone is available']"
-            :state="0"/>
-          <suggestion-card
-            title="Friday 8AM - 12PM"
-            :details="['Everyone is available']"
-            :state="0"/>
-          <suggestion-card
-            title="Saturday 12PM - 3PM"
-            :details="[
-              'Carton is uncertain at 12PM - 1PM and 2PM - 3PM',
-              'Leslie is uncertain at 1PM-3PM',
-            ]"
-            :state="1"/>
+          <suggestion-card v-for="entry in suggestionsVisualised" :key="entry"
+            :title="entry.title"
+            :details="entry.details"
+            :state="entry.state"/>
         </card-holder>
       </div>
     </div>
@@ -55,7 +44,9 @@
 
 <script>
 import decomposeCode from '@/model/code/code';
-import { gridAggregate } from '@/model/grid/gridcode';
+import { gridAggregate, gridGroup } from '@/model/grid/gridcode';
+import { days, times } from '@/model/data/data';
+import makeSuggestions from '@/model/schedule/schedule';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
 import CardHolder from '@/components/common/cardholder/CardHolder.vue';
@@ -80,6 +71,7 @@ export default {
       codeErrorNotifier: 0,
       participants: {},
       gridcode: '0',
+      suggestions: [],
     };
   },
   computed: {
@@ -96,6 +88,23 @@ export default {
       });
       ordered.sort((a, b) => a.details.insertedAt - b.details.insertedAt);
       return ordered;
+    },
+    suggestionsVisualised() {
+      const visualised = [];
+      this.suggestions.forEach((suggestion) => {
+        const details = [];
+        if (suggestion.state === 1) {
+          details.push('Everyone is available');
+        } else {
+          // TODO: Find who is not compatible with this suggestion
+        }
+        visualised.push({
+          title: `${days[suggestion.day]} ${times[suggestion.start]} - ${times[suggestion.end]}`,
+          details,
+          state: suggestion.state,
+        });
+      });
+      return visualised;
     },
   },
   methods: {
@@ -138,6 +147,8 @@ export default {
           }
         });
         this.gridcode = gridAggregate(gridcodes);
+        // Grouping results
+        this.suggestions = makeSuggestions(gridGroup(this.gridcode));
       },
       deep: true,
     },

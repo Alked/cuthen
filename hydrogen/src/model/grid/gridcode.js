@@ -54,15 +54,15 @@ function padding(binStr) {
 function gridDecode(codeStr36) {
   const codeNum = baseN2BigInt(codeStr36, 36);
   const binStr = padding(codeNum.toString(2));
-  const weeks = [...new Array(7)].map(() => [...new Array(24)].map(() => 0));
+  const days = [...new Array(7)].map(() => [...new Array(24)].map(() => 0));
   let cur = 0;
   for (let weekIdx = 0; weekIdx < 7; weekIdx += 1) {
     for (let slotIdx = 0; slotIdx < 24; slotIdx += 1) {
-      weeks[weekIdx][slotIdx] = code2SlotState(binStr.slice(cur, cur + 2));
+      days[weekIdx][slotIdx] = code2SlotState(binStr.slice(cur, cur + 2));
       cur += 2;
     }
   }
-  return weeks;
+  return days;
 }
 
 function gridValidate(codeStr36) {
@@ -91,9 +91,40 @@ function gridAggregate(gridcodes) {
   return result.toString(36);
 }
 
+function gridGroup(gridcode) {
+  const groups = [];
+  gridDecode(gridcode).forEach((day, dayIdx) => {
+    let lastHourState = day[0];
+    let group = {
+      day: dayIdx,
+      start: 0,
+      end: 1,
+      state: lastHourState,
+    };
+    day.slice(1).forEach((hourState, hourIdx) => {
+      if (hourState === lastHourState) {
+        group.end = hourIdx + 2;
+      } else {
+        groups.push(group);
+        group = {
+          day: dayIdx,
+          start: hourIdx + 1,
+          end: hourIdx + 2,
+          state: hourState,
+        };
+        lastHourState = hourState;
+      }
+    });
+    // Push the last group
+    groups.push(group);
+  });
+  return groups;
+}
+
 export {
   gridEncode,
   gridDecode,
   gridValidate,
   gridAggregate,
+  gridGroup,
 };
