@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      mousePos: [0, 0],
+      mousePos: [-999, -999],
       cellStates: [...new Array(24)].map(() => 0),
       isAllAvailable: false,
     };
