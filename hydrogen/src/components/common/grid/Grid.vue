@@ -1,5 +1,5 @@
 <template>
-  <div class='grid'>
+  <div class='grid' oncontextmenu="return false;">
       <div class='columns'>
         <column
           v-for='idx in 7' :key='idx'

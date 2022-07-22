@@ -1,7 +1,6 @@
 <template>
   <div
     class="cell"
-    oncontextmenu="return false;"
     @mousedown="onMouseDown"
     @mouseenter="onMouseEnter"
     :style="{ background: [
