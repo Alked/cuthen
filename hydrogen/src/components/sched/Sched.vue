@@ -17,6 +17,7 @@
             <i class="pi pi-times" v-show="insertFailed"></i>
           {{ insertLabel }}
         </button>
+        <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
       <div class="info-col">
         <card-holder icon="users" title="Participants">
@@ -46,9 +47,11 @@
 import decomposeCode from '@/model/code/code';
 import { gridAggregate, gridGroup, findUncertain } from '@/model/grid/gridcode';
 import { days, times } from '@/model/data/data';
+import { timezones, localtz } from '@/model/data/timezones';
 import makeSuggestions from '@/model/schedule/schedule';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
+import DropBox from '@/components/common/input/DropBox.vue';
 import CardHolder from '@/components/common/cardholder/CardHolder.vue';
 import ParticipantCard from '@/components/common/card/ParticipantCard.vue';
 import SuggestionCard from '@/components/common/card/SuggestionCard.vue';
@@ -58,6 +61,7 @@ export default {
   components: {
     Grid,
     TextBox,
+    DropBox,
     CardHolder,
     ParticipantCard,
     SuggestionCard,
@@ -72,6 +76,8 @@ export default {
       participants: {},
       gridcode: '0',
       suggestions: [],
+      timezones: [],
+      timezone: '', // Timezone the scheduling result should be displayed by
     };
   },
   computed: {
@@ -198,6 +204,11 @@ export default {
     const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
     this.participants['main-user'].gridcode = gridcode;
     this.participants['main-user'].timezone = timezone;
+  },
+  mounted() {
+    // Initialise after mounted to trigger watchers and updates
+    this.timezones = timezones;
+    this.timezone = localtz;
   },
 };
 </script>

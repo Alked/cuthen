@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { timezones, localtz } from '@/model/edit/timezones';
+import { timezones, localtz } from '@/model/data/timezones';
 import decomposeCode from '@/model/code/code';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
