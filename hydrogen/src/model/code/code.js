@@ -1,4 +1,4 @@
-import { timezones } from '@/model/edit/timezones';
+import { timezones } from '@/model/data/timezones';
 import { gridValidate } from '@/model/grid/gridcode';
 
 function decomposeCode(code) {
