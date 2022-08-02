@@ -1,3 +1,5 @@
+import { timezones } from '@/model/data/timezones';
+
 function slotState2code(state) {
   switch (state) {
     case 0:
@@ -129,6 +131,39 @@ function findUncertain(code, range) {
   return groups;
 }
 
+function shiftTimezone(code, fromtz, totz) {
+  const fromOffset = timezones.filter((tz) => tz.id === fromtz)[0].value;
+  const toOffset = timezones.filter((tz) => tz.id === totz)[0].value;
+  let codeStr = '';
+  gridDecode(code).forEach((day) => {
+    codeStr = codeStr.concat(day.join(''));
+  });
+  // # of digits to be shifted
+  let offset = Math.round((toOffset - fromOffset) / 60);
+  // Shift!
+  if (offset < 0) {
+    offset = Math.abs(offset);
+    codeStr = codeStr.slice(offset).concat(codeStr.slice(0, offset));
+  } else {
+    codeStr = codeStr.slice(-offset).concat(codeStr.slice(0, 24 * 7 - offset));
+  }
+  // Convert back to days
+  let days = [];
+  let day = [];
+  for (let slotIdx = 0; slotIdx < 24 * 7; slotIdx += 1) {
+    if (slotIdx % 24 === 0) {
+      // New day
+      days.push(day);
+      day = [];
+    }
+    day.push(parseInt(codeStr[slotIdx], 10));
+  }
+  days.push(day);
+  days = days.slice(1);
+  // Convert back to code
+  return gridEncode(days);
+}
+
 export {
   gridEncode,
   gridDecode,
@@ -136,4 +171,5 @@ export {
   gridAggregate,
   gridGroup,
   findUncertain,
+  shiftTimezone,
 };

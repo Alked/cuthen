@@ -45,7 +45,12 @@
 
 <script>
 import decomposeCode from '@/model/code/code';
-import { gridAggregate, gridGroup, findUncertain } from '@/model/grid/gridcode';
+import {
+  gridAggregate,
+  gridGroup,
+  findUncertain,
+  shiftTimezone,
+} from '@/model/grid/gridcode';
 import { days, times } from '@/model/data/data';
 import { timezones, localtz } from '@/model/data/timezones';
 import makeSuggestions from '@/model/schedule/schedule';
@@ -170,25 +175,42 @@ export default {
     onDeleteParticipant(id) {
       delete this.participants[id];
     },
+    // For watchers
+    refreshGridcode() {
+      const gridcodes = [];
+      Object.keys(this.participants).forEach((id) => {
+        if (this.participants[id].isInvolved) {
+          // Shift gridcode to selected timezone
+          const shiftedCode = shiftTimezone(
+            this.participants[id].gridcode,
+            this.participants[id].timezone,
+            this.timezone,
+          );
+          // Include the gridcode
+          gridcodes.push(shiftedCode);
+        }
+      });
+      // Calculate common availabilities
+      this.gridcode = gridAggregate(gridcodes);
+      // Grouping results
+      this.suggestions = makeSuggestions(gridGroup(this.gridcode));
+    },
   },
   watch: {
     participants: {
       handler() {
         // Update scheduling results
-        const gridcodes = [];
-        Object.keys(this.participants).forEach((id) => {
-          if (this.participants[id].isInvolved) {
-            gridcodes.push(this.participants[id].gridcode);
-          }
-        });
-        this.gridcode = gridAggregate(gridcodes);
-        // Grouping results
-        this.suggestions = makeSuggestions(gridGroup(this.gridcode));
+        this.refreshGridcode();
       },
       deep: true,
     },
+    timezone() {
+      this.refreshGridcode();
+    },
   },
-  created() {
+  mounted() {
+    this.timezones = timezones;
+    this.timezone = localtz;
     // Create main user's participant entry
     const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
     this.participants['main-user'] = {
@@ -204,11 +226,6 @@ export default {
     const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
     this.participants['main-user'].gridcode = gridcode;
     this.participants['main-user'].timezone = timezone;
-  },
-  mounted() {
-    // Initialise after mounted to trigger watchers and updates
-    this.timezones = timezones;
-    this.timezone = localtz;
   },
 };
 </script>
