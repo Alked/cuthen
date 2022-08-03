@@ -6,6 +6,8 @@
           :icon="'user'"
           :placeholder="'Insert a nickname'"
           prohibitedAlphabet="$"
+          :errorMessage="nicknameErrorMessage"
+          :errorNotifier="nicknameErrorNotifier"
           v-model:data="nickname"/>
         <drop-box :icon="'clock'" :entries="timezones" v-model:selectedID="timezone"/>
       </div>
@@ -109,6 +111,7 @@
 
 <script>
 import { timezones, localtz } from '@/model/data/timezones';
+import { nicknames } from '@/model/data/data';
 import decomposeCode from '@/model/code/code';
 import Grid from '@/components/common/grid/Grid.vue';
 import TextBox from '@/components/common/input/TextBox.vue';
@@ -133,6 +136,8 @@ export default {
       code: '',
       codeErrorMessage: '',
       codeErrorNotifier: 0,
+      nicknameErrorMessage: '',
+      nicknameErrorNotifier: 0,
     };
   },
   computed: {
@@ -184,6 +189,13 @@ export default {
       this.codeErrorMessage = '';
       this.codeErrorNotifier += 1;
     },
+    nickname(newNickname) {
+      // Do not allow empty nickname
+      if (newNickname === '') {
+        this.nicknameErrorMessage = 'Nickname cannot be empty';
+        this.nicknameErrorNotifier += 1;
+      }
+    },
   },
   mounted() {
     // Initialise after mounted to trigger watchers and updates
@@ -195,6 +207,10 @@ export default {
       this.nickname = name;
       this.gridcode = gridcode;
       this.timezone = timezone;
+    }
+    // Pick a random nickname if empty
+    if (this.nickname === '') {
+      this.nickname = nicknames[Math.round((Math.random() * 100000)) % nicknames.length];
     }
   },
 };

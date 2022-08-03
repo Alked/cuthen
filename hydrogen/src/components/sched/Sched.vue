@@ -212,9 +212,9 @@ export default {
     this.timezones = timezones;
     this.timezone = localtz;
     // Create main user's participant entry
-    const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
+    const [name, gridcode, timezone] = localStorage.getItem('code').split('$');
     this.participants['main-user'] = {
-      name: 'You',
+      name: `${name} (You)`,
       gridcode,
       timezone,
       isInvolved: true,
