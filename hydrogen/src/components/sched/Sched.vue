@@ -223,7 +223,8 @@ export default {
   },
   activated() {
     // Load/reload main user's code when this view is visited(activated)
-    const [gridcode, timezone] = localStorage.getItem('code').split('$').slice(1);
+    const [name, gridcode, timezone] = localStorage.getItem('code').split('$');
+    this.participants['main-user'].name = `${name} (You)`;
     this.participants['main-user'].gridcode = gridcode;
     this.participants['main-user'].timezone = timezone;
   },
