@@ -73,8 +73,6 @@ export default {
 }
 body {
   margin: 0;
-  width: 100%;
-  background: #2d2d2d;
   display: flex;
   justify-content: center;
   overflow-x: hidden;
@@ -82,12 +80,16 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
 }
 .main {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--main-bg-color);
 }
 .skin-dark {
   /* Global */
