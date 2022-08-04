@@ -98,6 +98,7 @@ body {
   --plain-text-color: #ddd;
   /* Banner */
   --top-bar-bg-color: #597081;
+  --top-bar-text-color: #2d2d2d;
   --nav-button-active-color: #6c889c;
   --nav-button-inactive-color: #7ea0b7;
   /* Grid */
@@ -111,6 +112,7 @@ body {
   --switch-inactive-bg-color: #597081;
   --switch-active-bg-color: #4cb569;
   --switch-toggle-color: #91a2ae;
+  --switch-toggle-on-color: #ddd;
   /* Input box */
   --textbox-bg-color: #5c5c5c;
   --textbox-error-bg-color: #aa4d5a;
