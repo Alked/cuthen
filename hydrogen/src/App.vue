@@ -12,6 +12,7 @@
       </transition>
     </router-view>
     <v-footer
+      @colorChange='wholePageColorChange'
       :contributors="[
         { name: 'Alked &#128002;&#127866;', url: 'https://github.com/Alked' },
         { name: 'Xxl-Valeria &#129453;', url: 'https://github.com/Xxl-Valeria' }
@@ -33,7 +34,7 @@ export default {
   },
   data() {
     return {
-      skin: 'dark',
+      skin: 'dark-blue',
       transitionName: '',
       refreshed: false,
       version: 'v0.0.13 alpha',
@@ -61,6 +62,13 @@ export default {
   created() {
     this.refreshed = true;
   },
+  methods: {
+    wholePageColorChange(color) {
+      console.log(color);
+      this.skin = color;
+    },
+  },
+
 };
 </script>
 
@@ -73,8 +81,6 @@ export default {
 }
 body {
   margin: 0;
-  width: 100%;
-  background: #2d2d2d;
   display: flex;
   justify-content: center;
   overflow-x: hidden;
@@ -82,20 +88,25 @@ body {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
 }
 .main {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: var(--main-bg-color);
 }
-.skin-dark {
+.skin-dark-blue {
   /* Global */
   --main-bg-color: #2d2d2d;
   --banner-text-color: #2d2d2d;
   --plain-text-color: #ddd;
   /* Banner */
   --top-bar-bg-color: #597081;
+  --top-bar-text-color: #2d2d2d;
   --nav-button-active-color: #6c889c;
   --nav-button-inactive-color: #7ea0b7;
   /* Grid */
@@ -109,6 +120,7 @@ body {
   --switch-inactive-bg-color: #597081;
   --switch-active-bg-color: #4cb569;
   --switch-toggle-color: #91a2ae;
+  --switch-toggle-on-color: #ddd;
   /* Input box */
   --textbox-bg-color: #5c5c5c;
   --textbox-error-bg-color: #aa4d5a;
