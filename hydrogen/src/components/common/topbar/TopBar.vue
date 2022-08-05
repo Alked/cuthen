@@ -28,7 +28,7 @@ export default {
 .info {
   padding-left: 1rem;
   font-family: 'Montserrat';
-  color: var(--main-bg-color);
+  color: var(--top-bar-text-color);
   font-weight: bold;
   font-size: larger;
 }

@@ -11,7 +11,7 @@
       :style="{
         'margin-left': isOn ? '1.7rem' : '0',
         background:
-          isOn ? 'var(--plain-text-color)'
+          isOn ? 'var(--switch-toggle-on-color)'
             : 'var(--switch-toggle-color)'
       }"
     ></div>
