@@ -36,7 +36,7 @@ export default {
       skin: 'dark',
       transitionName: '',
       refreshed: false,
-      version: 'v0.0.13 alpha',
+      version: 'v0.0.48 alpha',
     };
   },
   watch: {
@@ -85,7 +85,7 @@ body {
 .main {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
   justify-content: space-between;
   align-items: center;
   width: 100%;
