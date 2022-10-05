@@ -85,7 +85,7 @@ body {
 .main {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
   justify-content: space-between;
   align-items: center;
   width: 100%;
