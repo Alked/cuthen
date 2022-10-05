@@ -36,7 +36,7 @@ export default {
       skin: 'dark',
       transitionName: '',
       refreshed: false,
-      version: 'v0.0.13 alpha',
+      version: 'v0.0.48 alpha',
     };
   },
   watch: {
